@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-15T17:48:38-07:00</updated>
+  <updated>2013-05-15T18:04:36-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -16,11 +16,11 @@
   <entry>
     <title type="html"><![CDATA[10 Easy Ways to Craft More Readable CSS]]></title>
     <link href="http://causes.github.io/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/"/>
-    <updated>2013-03-16T00:00:00-07:00</updated>
+    <updated>2013-03-16T15:45:00-07:00</updated>
     <id>http://causes.github.io/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css</id>
     <content type="html"><![CDATA[<blockquote><p>Always code as if the [person] who ends up maintaining your code will be a
 violent psychopath who knows where you live. Code for readability.
-—<a href="https://groups.google.com/d/msg/comp.lang.c++/rYCO5yn4lXw/oITtSkZOtoUJ">John Woods</a></p></blockquote>
+—<cite><a href="https://groups.google.com/d/msg/comp.lang.c++/rYCO5yn4lXw/oITtSkZOtoUJ">John Woods</a></cite></p></blockquote>
 
 <p>Diving into a large, old piece of CSS typically is neither easy nor
 pleasurable. I find that <strong>the biggest challenges in working with old CSS often
