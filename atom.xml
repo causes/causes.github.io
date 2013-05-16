@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-15T18:48:29-07:00</updated>
+  <updated>2013-05-15T21:01:24-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -253,14 +253,14 @@ Not really proposed as an alternative because the full dataset won&rsquo;t fit
 into memory, but something we&rsquo;re considering loading a subset of the data into
 to answer queries that we make a lot that MySQL isn&rsquo;t particularly good at
 (e.g.  &lsquo;which of my friends have taken an action&rsquo; is quick using Redis&rsquo;s built
-in SET UNION function). The new MySQL table might be performant enough that it
+in <code>SET UNION</code> function). The new MySQL table might be performant enough that it
 doesn&rsquo;t make sense to build a fast Redis version, so we&rsquo;re avoiding this as
 possible premature optimization, especially with a technology we&rsquo;re not as
 familiar with.</p>
 
 <h2>Dumping the old data</h2>
 
-<p>MySQL provides the &lsquo;mysqldump&rsquo; utility to allow quick dumping to disk:</p>
+<p>MySQL provides the <code>mysqldump</code> utility to allow quick dumping to disk:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>mysqldump -T /var/lib/mysql/database_data database_name
@@ -268,7 +268,7 @@ familiar with.</p>
 
 
 <p>This will produce a TSV file for each table in the database, and this is the
-format that &lsquo;LOAD INFILE&rsquo; will be able to quickly load later on.</p>
+format that <code>LOAD INFILE</code> will be able to quickly load later on.</p>
 
 <h2>Installing Percona 5.5</h2>
 
@@ -311,14 +311,7 @@ my.cnf contains a</p>
 <p>This will set up the directory structures that InnoDB uses to store data. This
 is also useful if you&rsquo;re aborting a failed data load and want to wipe the slate
 clean (if you don&rsquo;t specify a directory, /var/lib/mysql is used by default).
-Just</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>rm -rf *
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>the directory and run the <code>mysql_install_db</code> command.</p>
+Just <code>rm -rf *</code> the directory and run the <code>mysql_install_db</code> command.</p>
 
 <p>[* <a href="http://dev.mysql.com/doc/refman/5.5/en/mysql-install-db.html">http://dev.mysql.com/doc/refman/5.5/en/mysql-install-db.html</a> ]</p>
 
@@ -365,15 +358,15 @@ while it took only a few hours to load 500m rows, the data was unusable without
 any indices. You could drop the indices completely and add them later, but with
 a table size this big I didn&rsquo;t think it would help much.</p>
 
-<p>Another red herring was turning off autocommit and committing after each &lsquo;LOAD
-DATA&rsquo; statement. This was effectively the same thing as autocommitting, and
-manually commiting led to &lsquo;LOAD DATA&rsquo; slowdowns a quarter of the way in.
-[<a href="http://dev.mysql.com/doc/refman/5.1/en/alter-table.html">http://dev.mysql.com/doc/refman/5.1/en/alter-table.html</a>]
--alter_table        =
--innodb_perf_basics = &lsquo;<a href="http://www.mysqlperformanceblog.com/2007/11/01/innodb-performance-optimization-basics/">http://www.mysqlperformanceblog.com/2007/11/01/innodb-performance-optimization-basics/</a>&rsquo;
-%ul
-  %li [ #{ link_to alter_table, alter_table }, search for &lsquo;DISABLE KEYS&rsquo; ]
-  %li [ #{ link_to innodb_perf_basics, innodb_perf_basics } ]</p>
+<p>Another red herring was turning off autocommit and committing after each <code>LOAD
+DATA</code> statement. This was effectively the same thing as autocommitting, and
+manually commiting led to <code>LOAD DATA</code> slowdowns a quarter of the way in.
+[<a href="http://dev.mysql.com/doc/refman/5.1/en/alter-table.html">http://dev.mysql.com/doc/refman/5.1/en/alter-table.html</a>]</p>
+
+<pre><code>- [&lt;http://dev.mysql.com/doc/refman/5.1/en/alter-table.html&gt;, search for
+  'DISABLE KEYS']
+- [ &lt;http://www.mysqlperformanceblog.com/2007/11/01/innodb-performance-optimization-basics/&gt; ]
+</code></pre>
 
 <h2>Performance adjustments made to my.cnf</h2>
 
