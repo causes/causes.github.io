@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MySQL | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/mysql/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-15T21:01:24-07:00</updated>
+  <updated>2013-05-15T21:02:27-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -167,7 +167,7 @@ month-sharding logic in Rails are slow and buggy.</li>
 </ul>
 
 
-<h1>Alternative Proposed Solutions</h1>
+<h2>Alternative Proposed Solutions</h2>
 
 <p><em>MySQL Partitioning:</em>
 This was the most similar to our existing set up, since MySQL internally
