@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Causes Engineering]]></title>
-  <link href="http://causes.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Stylesheets | Causes Engineering]]></title>
+  <link href="http://causes.github.io/blog/categories/stylesheets/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
   <updated>2013-05-15T17:48:38-07:00</updated>
   <id>http://causes.github.io/</id>
