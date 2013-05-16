@@ -19,7 +19,8 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+# Also used for Gravatar
+email: eng@causes.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
