@@ -1,56 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Causes Engineering]]></title>
-  <link href="http://causes.github.io/atom.xml" rel="self"/>
-  <link href="http://causes.github.io/"/>
-  <updated>2013-05-15T18:21:52-07:00</updated>
-  <id>http://causes.github.io/</id>
-  <author>
-    <name><![CDATA[Causes Engineers]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Even Faster: Loading Half a Billion Rows in MySQL Revisited - Causes Engineering</title>
+	<meta name="author" content="Causes Engineers">
 
+	
+	<meta name="description" content="Even Faster: Loading Half a Billion Rows in MySQL Revisited A few months ago, I wrote a post on loading 500 million rows into a single
+innoDB table &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Causes Engineering" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://causes.github.io/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">	
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='http://www.gravatar.com/avatar/" + MD5("") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">Causes Engineering</a></h1>
+<p class="subtitle"></p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="sub-nav">
+	<div class="social">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+	</div>
+</nav>
+<hgroup>
+  <h1><a href="/">Causes Engineering</a></h1>
   
-  <entry>
-    <title type="html"><![CDATA[10 Easy Ways to Craft More Readable CSS]]></title>
-    <link href="http://causes.github.io/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/"/>
-    <updated>2013-03-16T15:45:00-07:00</updated>
-    <id>http://causes.github.io/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css</id>
-    <content type="html"><![CDATA[<blockquote><p>Always code as if the [person] who ends up maintaining your code will be a
-violent psychopath who knows where you live. Code for readability.
-—<cite><a href="https://groups.google.com/d/msg/comp.lang.c++/rYCO5yn4lXw/oITtSkZOtoUJ">John Woods</a></cite></p></blockquote>
+</hgroup>
 
-<p>Diving into a large, old piece of CSS typically is neither easy nor
-pleasurable. I find that <strong>the biggest challenges in working with old CSS often
-lie in understanding the purpose and interactions of the styles</strong>.</p>
-
-<p>When styling new elements, we have the entire context of the implementation
-immediately available, and it is easy to write styles that make sense to us at
-that very moment. However, in a few weeks or to a fresh pair of eyes, what made
-a lot of sense at first might end up being a lot more cryptic. Without a clear
-understanding of the purpose and interactions of the styles, modifying
-stylesheets can be dangerous, tedious, and cumbersome. Therefore, it is
-important to communicate enough context so that future developers will be able
-to grok the code easily and make informed decisions.</p>
-
-<p>At <a href="http://www.causes.com/">Causes</a>, we have adopted the following practices
-which we believe have improved the maintainability of our stylesheets, reduced
-bugs, and increased developer velocity. When you have finished reading this, I
-hope that you will have a few more tools to help move your codebase toward
-greater maintainability.</p>
-
-<p><a href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/">Read on &rarr;</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Even Faster: Loading Half a Billion Rows in MySQL Revisited]]></title>
-    <link href="http://causes.github.io/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/"/>
-    <updated>2012-08-21T00:00:00-07:00</updated>
-    <id>http://causes.github.io/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql</id>
-    <content type="html"><![CDATA[<p>A few months ago, I wrote a post on loading 500 million rows into a single
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Even Faster: Loading Half a Billion Rows in MySQL Revisited</h1>
+	<div class="entry-content" itemprop="articleBody"><p>A few months ago, I wrote a post on loading 500 million rows into a single
 innoDB table from flatfiles. This was in the effort to un-‘optimize’ a premature
 optimization in our codebase: user action credits were being stored in monthly
 sharded tables to keep the tables small and performant. As our use of the code
@@ -206,7 +234,58 @@ in practice took me 5 seconds to DROP and 13 seconds to rm the hardlink.</p>
 like combining sharded tables), I’d recommend using the pt-online-schema-change
 tool provided by Percona. We’ll look at the details of that tool in a future
 post.</p>
-]]></content>
-  </entry>
-  
-</feed>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2013 - Causes Engineers -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31836-33']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>
