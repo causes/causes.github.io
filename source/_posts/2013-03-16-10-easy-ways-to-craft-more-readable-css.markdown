@@ -2,6 +2,7 @@
 layout: post
 title: 10 Easy Ways to Craft More Readable CSS
 date: 2013-03-16 15:45
+external-url: http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/
 author: Joe Lencioni
 categories:
   - CSS
