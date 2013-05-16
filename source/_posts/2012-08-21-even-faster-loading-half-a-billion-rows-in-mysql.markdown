@@ -20,8 +20,8 @@ table.
 
 Since writing the last post, I’ve learned that there’s a much quicker way to
 combine those tables — as long as you already have the data in MySQL. MySQL
-allows for selecting from one table into another via the INSERT INTO ..
-SELECT statement:
+allows for selecting from one table into another via the `INSERT INTO ..
+SELECT` statement:
 
 ```sql
 INSERT INTO dest_table (values) SELECT values FROM source_table;
