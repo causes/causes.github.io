@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MySQL | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/mysql/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-15T18:42:06-07:00</updated>
+  <updated>2013-05-15T18:48:29-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -31,8 +31,8 @@ table.</p>
 
 <p>Since writing the last post, I’ve learned that there’s a much quicker way to
 combine those tables — as long as you already have the data in MySQL. MySQL
-allows for selecting from one table into another via the INSERT INTO ..
-SELECT statement:</p>
+allows for selecting from one table into another via the <code>INSERT INTO ..
+SELECT</code> statement:</p>
 
 <p><code>sql
 INSERT INTO dest_table (values) SELECT values FROM source_table;
