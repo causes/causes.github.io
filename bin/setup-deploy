@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e
+
+# Assumes binary is being run from within repo. Seems legit.
+repo=`git rev-parse --show-toplevel`
+deploy_dir="$repo/_deploy"
+
+# Look for the current remote
+gerrit_remote=`git config --get remote.gerrit.url`
+[[ -z $gerrit_remote ]] && gerrit_remote=`git config --get remote.origin.url`
+
+if [[ -z $gerrit_remote ]] ; then
+  echo "No 'origin' or 'gerrit' remote configured. Bailing."
+  exit 1
+fi
+
+# Make sure it exists
+[[ -d "$deploy_dir" ]] || mkdir "$deploy_dir"
+
+cd "$deploy_dir"
+
+# Idempotent
+git init > /dev/null
+
+# Even though it's straight to master, it's still replicated via Gerrit
+git config --get remote.gerrit.url > /dev/null || \
+  git remote add gerrit $gerrit_remote
+
+git fetch gerrit
+git checkout master
+
+# Don't worry about local changes in the _deploy directory; this *only* contains
+# Octopress-generated content and should never be edited directly.
+git reset --hard gerrit/master
