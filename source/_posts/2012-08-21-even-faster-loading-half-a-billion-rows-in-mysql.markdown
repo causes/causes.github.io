@@ -38,6 +38,8 @@ This shouldn’t be surprising; an ALTER TABLE on an innoDB table creates a new
 table with the new schema and copies the rows from the old table over to the
 new table.
 
+<!-- more -->
+
 With large tables though, you still have to do a little leg work to get this to
 work properly. First, the database machine needs enough space to hold both the
 old table(s) and new tables on disk, until you’re able to delete the old table.

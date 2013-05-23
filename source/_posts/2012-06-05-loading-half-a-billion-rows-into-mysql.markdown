@@ -49,6 +49,7 @@ doesn't make sense to build a fast Redis version, so we're avoiding this as
 possible premature optimization, especially with a technology we're not as
 familiar with.
 
+<!-- more -->
 
 ## Dumping the old data
 
