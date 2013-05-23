@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-23T15:29:04-07:00</updated>
+  <updated>2013-05-23T16:18:53-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -83,6 +83,9 @@ SELECT</code> statement:</p>
 <p>This shouldn’t be surprising; an ALTER TABLE on an innoDB table creates a new
 table with the new schema and copies the rows from the old table over to the
 new table.</p>
+
+<!-- more -->
+
 
 <p>With large tables though, you still have to do a little leg work to get this to
 work properly. First, the database machine needs enough space to hold both the
@@ -257,6 +260,9 @@ in <code>SET UNION</code> function). The new MySQL table might be performant eno
 doesn&rsquo;t make sense to build a fast Redis version, so we&rsquo;re avoiding this as
 possible premature optimization, especially with a technology we&rsquo;re not as
 familiar with.</p>
+
+<!-- more -->
+
 
 <h2>Dumping the old data</h2>
 
