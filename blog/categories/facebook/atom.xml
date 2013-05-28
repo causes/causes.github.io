@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Facebook | Causes Engineering]]></title>
+  <link href="http://causes.github.io/blog/categories/facebook/atom.xml" rel="self"/>
+  <link href="http://causes.github.io/"/>
+  <updated>2013-05-28T16:44:52-07:00</updated>
+  <id>http://causes.github.io/</id>
+  <author>
+    <name><![CDATA[Causes Engineers]]></name>
+    <email><![CDATA[eng@causes.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Working with <em>Asynchronously Loaded JavaScript Objects</em>]]></title>
+    <link href="http://causes.github.io/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/"/>
+    <updated>2013-05-28T14:00:00-07:00</updated>
+    <id>http://causes.github.io/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects</id>
+    <content type="html"><![CDATA[<p>Telling browsers to load large JavaScripts asynchronously can significantly
+improve performance. This prevents the browser from blocking the rendering of
+the page, allowing it to be viewed more quickly. However, if you are loading
+dependent files asynchronously, such as a third-party service&rsquo;s API, making the
+scripts work together is not automatic.</p>
+
+<p>At <a href="http://www.causes.com">Causes</a> we use Facebook&rsquo;s large (nearly 60 <abbr
+title="Kibibytes">KiB</abbr> gzipped) JavaScript API on our pages. Although
+<a href="https://developers.facebook.com/docs/reference/javascript/#loading">they recommend loading it
+asynchronously</a>,
+we were already putting our JavaScript at the bottom of the page and weren&rsquo;t
+convinced that async would give us much additional benefit. However, after some
+non-scientific performance tests it appeared that switching to asynchronously
+loading the Facebook API could reduce the time to <code>DOMContentLoaded</code> by nearly
+a full second on our pages.</p>
+
+<!-- more -->
+
+
+<p>After the Facebook API has been loaded asynchronously, it executes
+<code>window.fbAsyncInit</code>, which is where  <a href="https://developers.facebook.com/docs/javascript/gettingstarted/#loading">they
+suggest</a>
+placing code that depends on the <code>FB</code>.</p>
+
+<p>The trouble is, we wanted our JavaScript that interacts with the Facebook API
+to continue to work even though it is dispersed throughout our scripts, and it
+may execute before the API was available.</p>
+
+<p>The <a href="http://stackoverflow.com/questions/3548493/how-to-detect-when-facebooks-fb-init-is-complete">answers on
+StackOverflow</a>
+may work, but they feel inelegant. For instance, <a href="http://stackoverflow.com/a/3549043/18986">one
+answer</a> addresses this problem by
+setting a flag to true in the <code>fbAsyncInit</code> callback, and creates a
+<code>fbEnsureInit</code> method that uses a recursive timeout to poll the flag.</p>
+
+<p>We decided to take a different approach. Thankfully, the Facebook API sets up a
+single object, <code>FB</code>, for developers to interact with.</p>
+
+<p>So we developed a class, <code>MethodProxy</code>, to act as a proxy between the rest of
+our code and the <code>FB</code> object. It accepts an object to forward calls onto, and
+it masquerades as an Array by implementing a <code>push</code> method. The <code>push</code> method
+accepts a single argument of a array whose first position is always a string of
+the method name on the <code>FB</code> object to be executed, followed by as many
+arguments to be given to that method.</p>
+
+<p>```javascript MethodProxy.push()
+// payload : [&lsquo;methodName&rsquo;, arguments*]
+this.push = this.forward = function(payload) {
+  var methodName = payload.shift().split(&lsquo;.&rsquo;),</p>
+
+<pre><code>  object     = this.object,
+  method;
+</code></pre>
+
+<p>  while (methodName.length) {</p>
+
+<pre><code>// dig into the object as many levels as needed (e.g. `FB.XFBML.parse`)
+if (method) {
+  object = object[method];
+}
+method = methodName.shift();
+</code></pre>
+
+<p>  }
+  return object[method].apply(object, payload);
+};
+```</p>
+
+<p>This allows us to initialize a native Array when the page loads to collect
+calls to Facebook&rsquo;s API. Then, in the <code>fbAsyncInit</code> callback, we Indiana Jones
+style swap out the native array with an instantiation of our <code>MethodProxy</code>
+object, which then consumes the queued events by executing them on the <code>FB</code>
+object. The end result is a consistent API for our code to use regardless of
+the state of Facebook&rsquo;s asynchronously loaded API.</p>
+
+<p>```javascript
+MyFB = window.MyFB || [];</p>
+
+<p>MyFB.push([&lsquo;ui&rsquo;, { &hellip; }]);</p>
+
+<p>window.fbAsyncInit = function() {
+  FB.init({</p>
+
+<pre><code>...
+</code></pre>
+
+<p>  });</p>
+
+<p>  MyFB = new MethodProxy(FB, MyFB);
+};</p>
+
+<p>MyFB.push([&lsquo;FBML.parse&rsquo;, &hellip;]);
+```</p>
+
+<p><code>MethodProxy</code> is general enough to be used for other similar cases so we&rsquo;ve
+released it as <a href="https://github.com/causes/method-proxy-js">method-proxy-js, an open source
+project</a> under the MIT license. Pull
+requests welcome.</p>
+]]></content>
+  </entry>
+  
+</feed>

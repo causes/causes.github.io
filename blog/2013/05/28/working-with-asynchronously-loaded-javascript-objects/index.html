@@ -1,0 +1,231 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Working with <em>Asynchronously Loaded JavaScript Objects</em> - Causes Engineering</title>
+	<meta name="author" content="Causes Engineers">
+
+	
+	<meta name="description" content="Working With Asynchronously Loaded JavaScript Objects Telling browsers to load large JavaScripts asynchronously can significantly
+improve &hellip;">
+	
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Causes Engineering" type="application/atom+xml">
+	
+	<link rel="canonical" href="http://causes.github.io/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+</head>
+
+
+<body>
+	<div class="container">
+		<div class="left-col">
+			<div class="intrude-less">
+			<header id="header" class="inner"><div class="profilepic">
+	<script src="/javascripts/md5.js"></script>
+	<script type="text/javascript">
+		document.write("<img src='http://www.gravatar.com/avatar/" + MD5("eng@causes.com") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
+	</script>
+</div>
+<h1><a href="/">Causes Engineering</a></h1>
+<p class="subtitle"></p>
+<nav id="main-nav"><ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+</header>				
+			</div>
+		</div>	
+		<div class="mid-col">
+			
+				
+			
+			<div class="mid-col-container">
+				<div id="content" class="inner"><article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+	<h1 class="title" itemprop="name">Working With <em>Asynchronously Loaded JavaScript Objects</em></h1>
+	<div class="entry-content" itemprop="articleBody"><p>Telling browsers to load large JavaScripts asynchronously can significantly
+improve performance. This prevents the browser from blocking the rendering of
+the page, allowing it to be viewed more quickly. However, if you are loading
+dependent files asynchronously, such as a third-party service&rsquo;s API, making the
+scripts work together is not automatic.</p>
+
+<p>At <a href="http://www.causes.com">Causes</a> we use Facebook&rsquo;s large (nearly 60 <abbr
+title="Kibibytes">KiB</abbr> gzipped) JavaScript API on our pages. Although
+<a href="https://developers.facebook.com/docs/reference/javascript/#loading">they recommend loading it
+asynchronously</a>,
+we were already putting our JavaScript at the bottom of the page and weren&rsquo;t
+convinced that async would give us much additional benefit. However, after some
+non-scientific performance tests it appeared that switching to asynchronously
+loading the Facebook API could reduce the time to <code>DOMContentLoaded</code> by nearly
+a full second on our pages.</p>
+
+<!-- more -->
+
+
+<p>After the Facebook API has been loaded asynchronously, it executes
+<code>window.fbAsyncInit</code>, which is where  <a href="https://developers.facebook.com/docs/javascript/gettingstarted/#loading">they
+suggest</a>
+placing code that depends on the <code>FB</code>.</p>
+
+<p>The trouble is, we wanted our JavaScript that interacts with the Facebook API
+to continue to work even though it is dispersed throughout our scripts, and it
+may execute before the API was available.</p>
+
+<p>The <a href="http://stackoverflow.com/questions/3548493/how-to-detect-when-facebooks-fb-init-is-complete">answers on
+StackOverflow</a>
+may work, but they feel inelegant. For instance, <a href="http://stackoverflow.com/a/3549043/18986">one
+answer</a> addresses this problem by
+setting a flag to true in the <code>fbAsyncInit</code> callback, and creates a
+<code>fbEnsureInit</code> method that uses a recursive timeout to poll the flag.</p>
+
+<p>We decided to take a different approach. Thankfully, the Facebook API sets up a
+single object, <code>FB</code>, for developers to interact with.</p>
+
+<p>So we developed a class, <code>MethodProxy</code>, to act as a proxy between the rest of
+our code and the <code>FB</code> object. It accepts an object to forward calls onto, and
+it masquerades as an Array by implementing a <code>push</code> method. The <code>push</code> method
+accepts a single argument of a array whose first position is always a string of
+the method name on the <code>FB</code> object to be executed, followed by as many
+arguments to be given to that method.</p>
+
+<figure class='code'><figcaption><span>MethodProxy.push()</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// payload : [&#39;methodName&#39;, arguments*]</span>
+</span><span class='line'><span class="k">this</span><span class="p">.</span><span class="nx">push</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">forward</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">methodName</span> <span class="o">=</span> <span class="nx">payload</span><span class="p">.</span><span class="nx">shift</span><span class="p">().</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">),</span>
+</span><span class='line'>      <span class="nx">object</span>     <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">object</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">method</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">while</span> <span class="p">(</span><span class="nx">methodName</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// dig into the object as many levels as needed (e.g. `FB.XFBML.parse`)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">method</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">object</span> <span class="o">=</span> <span class="nx">object</span><span class="p">[</span><span class="nx">method</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">method</span> <span class="o">=</span> <span class="nx">methodName</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">object</span><span class="p">[</span><span class="nx">method</span><span class="p">].</span><span class="nx">apply</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">payload</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This allows us to initialize a native Array when the page loads to collect
+calls to Facebook&rsquo;s API. Then, in the <code>fbAsyncInit</code> callback, we Indiana Jones
+style swap out the native array with an instantiation of our <code>MethodProxy</code>
+object, which then consumes the queued events by executing them on the <code>FB</code>
+object. The end result is a consistent API for our code to use regardless of
+the state of Facebook&rsquo;s asynchronously loaded API.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">MyFB</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MyFB</span> <span class="o">||</span> <span class="p">[];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">MyFB</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;ui&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}]);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">fbAsyncInit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">FB</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+</span><span class='line'>    <span class="p">...</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">MyFB</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MethodProxy</span><span class="p">(</span><span class="nx">FB</span><span class="p">,</span> <span class="nx">MyFB</span><span class="p">);</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">MyFB</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;FBML.parse&#39;</span><span class="p">,</span> <span class="p">...]);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>MethodProxy</code> is general enough to be used for other similar cases so we&rsquo;ve
+released it as <a href="https://github.com/causes/method-proxy-js">method-proxy-js, an open source
+project</a> under the MIT license. Pull
+requests welcome.</p>
+</div>
+
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+			</div>
+			<footer id="footer" class="inner"><p>
+  Copyright &copy; 2013 - Causes Engineers -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+Design credit: <a href="http://shashankmehta.in/archive/2012/greyshade.html">Shashank Mehta</a></footer>
+			<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31836-33']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+		</div>
+	</div>
+</body>
+</html>

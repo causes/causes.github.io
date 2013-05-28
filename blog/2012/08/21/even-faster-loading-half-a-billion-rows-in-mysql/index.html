@@ -71,8 +71,8 @@ table.</p>
 
 <p>Since writing the last post, I’ve learned that there’s a much quicker way to
 combine those tables — as long as you already have the data in MySQL. MySQL
-allows for selecting from one table into another via the INSERT INTO ..
-SELECT statement:</p>
+allows for selecting from one table into another via the <code>INSERT INTO ..
+SELECT</code> statement:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">dest_table</span> <span class="p">(</span><span class="k">values</span><span class="p">)</span> <span class="k">SELECT</span> <span class="k">values</span> <span class="k">FROM</span> <span class="n">source_table</span><span class="p">;</span>
@@ -91,6 +91,9 @@ SELECT statement:</p>
 <p>This shouldn’t be surprising; an ALTER TABLE on an innoDB table creates a new
 table with the new schema and copies the rows from the old table over to the
 new table.</p>
+
+<!-- more -->
+
 
 <p>With large tables though, you still have to do a little leg work to get this to
 work properly. First, the database machine needs enough space to hold both the
