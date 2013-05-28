@@ -156,8 +156,8 @@ table.</p>
 
 <p>Since writing the last post, I’ve learned that there’s a much quicker way to
 combine those tables — as long as you already have the data in MySQL. MySQL
-allows for selecting from one table into another via the <code>INSERT INTO ..
-SELECT</code> statement:</p>
+allows for selecting from one table into another via the INSERT INTO ..
+SELECT statement:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">dest_table</span> <span class="p">(</span><span class="k">values</span><span class="p">)</span> <span class="k">SELECT</span> <span class="k">values</span> <span class="k">FROM</span> <span class="n">source_table</span><span class="p">;</span>
@@ -177,87 +177,131 @@ SELECT</code> statement:</p>
 table with the new schema and copies the rows from the old table over to the
 new table.</p>
 
+<p>With large tables though, you still have to do a little leg work to get this to
+work properly. First, the database machine needs enough space to hold both the
+old table(s) and new tables on disk, until you’re able to delete the old table.
+As you insert into the table, inserts will get slower and slower. This also
+makes sense; as the table grows the indexes grow, and working with them gets
+slower. You’ll want to break the loading into many chunks so that each
+transaction completes in a reasonable amount of time. In practice, I’ve found
+that the optimum chunk size gets smaller as the size of the table grows.
+Starting at 100k rows is not unreasonable, but don’t be surprised if near the
+end you need to drop it closer to 10k or 5k to keep the transaction to under 30
+seconds. If you don’t keep the transaction time reasonable, the whole operation
+could outright fail eventually with something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">ERROR</span> <span class="mi">1197</span> <span class="p">(</span><span class="n">HY000</span><span class="p">):</span> <span class="n">Multi</span><span class="o">-</span><span class="k">statement</span> <span class="n">transaction</span> <span class="n">required</span> <span class="k">more</span> <span class="k">than</span>
+</span><span class='line'><span class="err">‘</span><span class="n">max_binlog_cache_size</span><span class="err">’</span> <span class="n">bytes</span> <span class="k">of</span> <span class="k">storage</span><span class="p">;</span> <span class="n">increase</span> <span class="n">this</span> <span class="n">mysqld</span> <span class="k">variable</span> <span class="k">and</span>
+</span><span class='line'><span class="n">try</span> <span class="n">again</span><span class="p">.</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It will certainly slow down (I wish I had kept a graph of timestamp vs rows
+inserted, but it’s certainly de-motivating). You might also want a delay as to
+not overwhelm the slave and cause replication to lag too far behind. I used
+external files to store the values of both variables that were read from disk at
+each iteration, so that I could change the values without interrupting the
+script. Using the same file trick, each iteration wrote out the table name and
+id of the last row read (in case something broke and I wanted to resume).</p>
+
+<p>This is the script that was used to perform the migration. I left it running in
+a tmux session and also used `watch -n 10 LAST_WRITTEN’ to monitor the progress.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1">#!/usr/bin/env ruby</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">file_variable</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">File</span><span class="o">.</span><span class="n">readlines</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">to_i</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">TARGET_TABLE</span> <span class="o">=</span> <span class="s1">&#39;action_credits&#39;</span>
+</span><span class='line'><span class="no">SCHEMA</span> <span class="o">=</span> <span class="o">&lt;&lt;-</span><span class="no">SQL</span>
+</span><span class='line'><span class="sh">CREATE TABLE IF NOT EXISTS `action_credits` (</span>
+</span><span class='line'><span class="sh">.. omitted for brevity ..</span>
+</span><span class='line'><span class="sh"> ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</span>
+</span><span class='line'><span class="no">SQL</span>
+</span><span class='line'><span class="n">insert_columns</span> <span class="o">=</span> <span class="p">(</span><span class="n">has_utm_campaign</span> <span class="p">?</span> <span class="n">columns</span> <span class="p">:</span> <span class="n">columns</span> <span class="o">+</span> <span class="o">[</span><span class="s1">&#39;utm_campaign&#39;</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;,&#39;</span>
+</span><span class='line'><span class="n">select_columns</span> <span class="o">=</span> <span class="p">(</span><span class="n">has_utm_campaign</span> <span class="p">?</span> <span class="n">columns</span> <span class="p">:</span> <span class="n">columns</span> <span class="o">+</span> <span class="o">[</span><span class="s1">&#39;NULL&#39;</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">join</span> <span class="s1">&#39;,&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">file_variable</span><span class="p">(</span><span class="s1">&#39;CHUNK_SIZE&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="p">(</span><span class="n">rows</span> <span class="o">/</span> <span class="n">chunk_size</span><span class="p">))</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">lower</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">chunk_size</span>
+</span><span class='line'>  <span class="n">upper</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">chunk_size</span> <span class="o">-</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="n">query</span> <span class="o">=</span> <span class="o">&lt;&lt;-</span><span class="no">SQL</span><span class="o">.</span><span class="n">squish</span>
+</span><span class='line'><span class="sh">    INSERT INTO \#{TARGET_TABLE} (\#{insert_columns})</span>
+</span><span class='line'><span class="sh">    SELECT \#{select_columns} FROM \#{table}</span>
+</span><span class='line'><span class="sh">    WHERE id BETWEEN \#{lower} AND \#{upper}</span>
+</span><span class='line'><span class="no">  SQL</span>
+</span><span class='line'>  <span class="n">query_start</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">now</span>
+</span><span class='line'>  <span class="n">q</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="kp">true</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Finished at </span><span class="se">\#</span><span class="s2">{Time.now} in </span><span class="se">\#</span><span class="s2">{Time.now - query_start} seconds&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;LAST_WRITTEN&#39;</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="p">{</span><span class="o">|</span><span class="n">f</span><span class="o">|</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="o">[</span><span class="n">table</span><span class="p">,</span> <span class="n">upper</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">delay</span> <span class="o">=</span> <span class="n">file_variable</span><span class="p">(</span><span class="s1">&#39;DELAY&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Waiting </span><span class="se">\#</span><span class="s2">{delay} seconds&quot;</span> <span class="k">if</span> <span class="n">delay</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</span><span class='line'>  <span class="nb">sleep</span> <span class="n">delay</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;Finished in </span><span class="se">\#</span><span class="s2">{((Time.now - start) / 3600).to_i} hours&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There’s a slight concern that dropping the table while the filesystem deletes
+the ibd files (where the innoDB data lives) will lock the table for a long
+period of time (see <a href="http://bugs.mysql.com/bug.php?id=41158">http://bugs.mysql.com/bug.php?id=41158</a>), but it wasn’t a
+problem when I tried it on a 116 GB table. If you prefer to be paranoid (like I
+was), there’s a trick you can use to unlink the table data asynchronously:
+create a hard link to the table’s .ibd file before you DROP the table; the DROP
+will only unlink one of the two hard links to the file. Afterward you can `rm
+the_hardlink’ and your filesystem will remove the .ibd data. Using this method
+in practice took me 5 seconds to DROP and 13 seconds to rm the hardlink.</p>
+
+<p>If all you need to do is a simple alter table (and not something complicated
+like combining sharded tables), I’d recommend using the pt-online-schema-change
+tool provided by Percona. We’ll look at the details of that tool in a future
+post.</p>
 
 		
-		<a href="/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/" class="more-link">Read on &rarr;</a>
-	</div>
-
-</article>
-
-
-    <article class="post" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="meta">
-		<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-05T00:00:00-07:00" data-updated="true" itemprop="datePublished">Jun 5<span>th</span>, 2012</time></div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/mysql/'>MySQL</a>
-
-
-</div>
 		
-	</div>
-	<h1 class="title" itemprop="name"><a href="/blog/2012/06/05/loading-half-a-billion-rows-into-mysql/" itemprop="url">Loading Half a Billion Rows Into MySQL</a></h1>
-	<div class="entry-content" itemprop="articleBody">
-		<h2>Background</h2>
-
-<p>We have a legacy system in our production environment that keeps track of when
-a user takes an action on Causes.com (joins a Cause, recruits a friend, etc).
-I say legacy, but I really mean a prematurely-optimized system that I&rsquo;d like
-to make less smart. This 500m record database is split across monthly sharded
-tables. Seems like a great solution to scaling (and it is)&mdash;except that
-we don&rsquo;t need it. And based on our usage pattern (e.g. to count a user&rsquo;s total
-number of actions, we need to do query N tables), this leads to pretty severe
-performance degradation issues. Even with memcache layer sitting in front of
-old month tables, new features keep discovering new N-query performance
-problems.  Noticing that we have another database happily chugging along with
-900 million records, I decided to migrate the existing system into a single
-table setup. The goals were:</p>
-
-<ul>
-<li>Reduce complexity. Querying one table is simpler than N tables.</li>
-<li>Push as much complexity as possible to the database. The wrappers around the
-month-sharding logic in Rails are slow and buggy.</li>
-<li>Increase performance. Also related to one table query being simpler than N.</li>
-</ul>
-
-
-<h2>Alternative Proposed Solutions</h2>
-
-<p><em>MySQL Partitioning:</em>
-This was the most similar to our existing set up, since MySQL internally
-stores the data into different tables. We decided against it because it seemed
-likely that it wouldn&rsquo;t be much faster than our current solution (although
-MySQL can internally do some optimizations to make sure you only look at
-tables that could possibly have data you want). And it&rsquo;s still the same
-complexity we were looking to reduce (and would further be the only database
-set up in our system using partitioning).</p>
-
-<p><em>Redis:</em>
-Not really proposed as an alternative because the full dataset won&rsquo;t fit
-into memory, but something we&rsquo;re considering loading a subset of the data into
-to answer queries that we make a lot that MySQL isn&rsquo;t particularly good at
-(e.g.  &lsquo;which of my friends have taken an action&rsquo; is quick using Redis&rsquo;s built
-in <code>SET UNION</code> function). The new MySQL table might be performant enough that it
-doesn&rsquo;t make sense to build a fast Redis version, so we&rsquo;re avoiding this as
-possible premature optimization, especially with a technology we&rsquo;re not as
-familiar with.</p>
-
-
-		
-		<a href="/blog/2012/06/05/loading-half-a-billion-rows-into-mysql/" class="more-link">Read on &rarr;</a>
 	</div>
 
 </article>
