@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Working with <em>Asynchronously Loaded JavaScript Objects</em>'
+title: 'Working with Asynchronously Loaded JavaScript Objects'
 date: 2013-05-28 14:00
 external-url: http://joelencioni.com/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/
 author: Joe Lencioni
