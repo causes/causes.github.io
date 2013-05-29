@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<title>Loading half a billion rows into MySQL  | Causes Engineering</title>
 
-<meta name="author" content="Causes Engineers"> 
+<meta name="author" content="Causes Engineers">
 
 <meta name="description" content="Background We have a legacy system in our production environment that keeps track of when
 a user takes an action on Causes.com (joins a Cause, &hellip;"> <meta name="keywords" content="">
@@ -21,49 +21,14 @@ a user takes an action on Causes.com (joins a Cause, &hellip;"> <meta name="keyw
 	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="/fancybox/jquery.fancybox.pack.js"></script>
-
-<script language="Javascript" type="text/javascript">
-$(document).ready(
-  function() {
-    (function($) {
-      $(".fancybox[data-content-id]").each(function() {
-        this.href = $(this).data('content-id');
-      });
-      $(".fancybox").fancybox({
-        beforeLoad: function() {
-          var el, 
-              id = $(this.element).data('title-id');
-
-          if (id) {
-            el = $('#' + id);
-
-            if (el.length) {
-              this.title = el.html();
-            }
-          }
-          if ($(this).data('content')) {
-            this.content = $(this).data('content');
-          }
-        },
-        helpers: {
-          title: {
-            type: 'inside'
-          }
-        }
-      });
-    })(jQuery);
-  }
-);
-</script>
 	
 </head>
 
 
+
 <body>
 	<header id="header" class="inner"><h1><a href="/">Causes Engineering</a></h1>
-<h4></h4>
+<h4>Words</h4>
 <nav id="main-nav"><ul>
 	<li><a href="/">Words</a></li>
 	<li><a href="https://github.com/causes">Code</a></li>
@@ -513,15 +478,6 @@ super-smart coworkers at Causes. Check out
 Powered by Octopress.
 </footer>
 	<script src="/javascripts/slash.js"></script>
-<script src="/javascripts/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-	$('.fancybox').fancybox();
-})(jQuery);
-</script> <!-- Delete or comment this line to disable Fancybox -->
-
-
-
 
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
@@ -534,6 +490,7 @@ Powered by Octopress.
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 		})();
 	</script>
+
 
 
 
