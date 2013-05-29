@@ -12,3 +12,11 @@ To do so, run `bin/setup-deploy`. This creates the _deploy subdirectory that
 `rake generate` (from Octopress) will populate with the built site. You always
 want to be on the `master` branch in _deploy, since that's where the static
 files get committed.
+
+### Creating posts
+
+    rake new_post['My Post Title']
+
+### Publishing
+
+   rake deploy
