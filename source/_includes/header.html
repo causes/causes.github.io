@@ -1,9 +1,20 @@
-<div class="profilepic">
-	<script src="{{ root_url }}/javascripts/md5.js"></script>
-	<script type="text/javascript">
-		document.write("<img src='http://www.gravatar.com/avatar/" + MD5("{{ site.email | downcase }}") + "?s=160' alt='Profile Picture' style='width: 160px;' />");
-	</script>
-</div>
 <h1><a href="{{ root_url }}/">{{ site.title }}</a></h1>
-<p class="subtitle">{{ site.subtitle }}</p>
+<h4>{{site.subtitle}}</h4>
 <nav id="main-nav">{% include navigation.html %}</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container">{% include navigation.html %}</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="{{ site.simple_search }}" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:{{ site.url | shorthand_url }}">
+			</form>
+		</div>
+	</div>
+</nav>
+
+{% include custom/header.html %}

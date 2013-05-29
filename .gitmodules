@@ -1,3 +1,6 @@
 [submodule ".themes/greyshade"]
 	path = .themes/greyshade
 	url = git://github.com/shashankmehta/greyshade.git
+[submodule ".themes/cleanpress"]
+	path = .themes/cleanpress
+	url = git://github.com/macjasp/cleanpress.git
