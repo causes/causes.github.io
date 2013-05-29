@@ -15,8 +15,25 @@ files get committed.
 
 ### Creating posts
 
-    rake new_post['My Post Title']
+Writing always happens in the `source` branch. To create a new post, run the
+following command:
+
+    bundle exec rake new_post['My Post Title']
+
+This will create a .markdown file in `source/_posts/` that includes the current
+date and a slugified version of the post title.
+
+When you are ready for your post to be reviewed, push to gerrit:
+
+    git push gerrit
 
 ### Publishing
 
-   rake deploy
+When you are ready to see your new content on the blog, run the following
+command:
+
+    bundle exec rake deploy
+
+This will push straight to production, bypassing code review. Any local posts
+that aren't marked as unpublished, even ones that are untracked, will be live
+on the website.
