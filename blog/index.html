@@ -2,16 +2,15 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta name="google-site-verification" content="f1OtvP7JCHm6M9Ca7vMcFg3q-1NEOvDMcSKfKlVW_pA" />
-	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
-	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
 	<meta charset="utf-8">
 	<title>  | Causes Engineering</title>
 
 <meta name="author" content="Causes Engineers"> 
 
-<meta name="description" content="Telling browsers to load large JavaScripts asynchronously can significantly
-improve performance. This prevents the browser from blocking the &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="At Causes, we care deeply about code quality. We
+promote thorough, offline code review through
+Gerrit and take pride in each commit we
+make. Due to &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -64,6 +63,103 @@ improve performance. This prevents the browser from blocking the &hellip;"> <met
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/">
+		
+			Overcommit: The Opinionated Git Hook Manager</a>
+	</h2>
+	<div class="entry-content">
+		<p>At <a href="http://www.causes.com">Causes</a>, we care deeply about code quality.  We
+promote thorough, offline code review through
+<a href="https://code.google.com/p/gerrit/">Gerrit</a> and take pride in each commit we
+make. Due to the sheer volume of code review and the number of engineers on our
+team, it&rsquo;s important that by the time other engineers review our code we have an
+established baseline of quality.</p>
+
+<p>There are a few important ingredients to making a good commit:</p>
+
+<ul>
+<li>Correctness: The code does what you expect it to do</li>
+<li>Commit message: Tim Pope provides an excellent summary of <a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html">what makes a good
+commit message</a></li>
+<li>Style: The code matches our team&rsquo;s coding styles</li>
+<li>Test coverage: relevant tests have been run, and any new features have spec
+coverage</li>
+</ul>
+
+
+<p>Enter <a href="https://github.com/causes/overcommit">overcommit</a>. This evolved from a
+set single file linter into a full-fledged, extensible hook architecture.
+Available as a Ruby gem:</p>
+
+<pre><code>gem install overcommit
+</code></pre>
+
+<p>What does it do? In short, it automates away all the tedium before a commit
+reaches code review. It ships with a set of opinionated lints that ensure a
+level of consistency and quality in our commits.</p>
+
+<h2>In Action</h2>
+
+<p>Here&rsquo;s an example of overcommit saving me from committing janky code:</p>
+
+<pre><code>❯❯❯ echo "eval('alert(\"hello world\")');" > eval.js
+❯❯❯ git add eval.js
+❯❯❯ git commit
+Running pre_commit checks
+  Checking causes_email...........<span class="success">OK</span>
+  Checking test_history...........<span class="warning">No relevant tests for this change...write some?</span>
+  Checking restricted_paths.......<span class="success">OK</span>
+  Checking js_console_log.........<span class="success">OK</span>
+  Checking js_syntax..............<span class="error">FAILED</span>
+    ERROR in eval.js at 1:1
+
+        eval is evil.
+
+        eval('alert("hello world")');
+
+  Checking author_name............<span class="success">OK</span>
+  Checking whitespace.............<span class="success">OK</span>
+
+<span class="error">!!! One or more pre_commit checks failed</span>
+</code></pre>
+
+
+
+
+
+		
+		<a href="/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-30T14:02:00-07:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/automation/'>Automation</a>, <a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="http://joelencioni.com/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/">
 		
 			Working With Asynchronously Loaded JavaScript Objects</a>
@@ -87,7 +183,7 @@ a full second on our pages.</p>
 
 
 		
-		<a href="/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/" class="more-link">Read on &rarr;</a>
+		<a href="/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/" class="more-link">Read on</a>
 	</div>
 
 
@@ -147,7 +243,7 @@ bugs, and increased developer velocity. When you have finished reading this, I
 hope that you will have a few more tools to help move your codebase toward
 greater maintainability.</p>
 
-<p><a href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/">Read on &rarr;</a></p>
+<p><a class="more-link" href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/">Read on</a></p>
 
 		
 		
@@ -223,7 +319,7 @@ new table.</p>
 
 
 		
-		<a href="/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/" class="more-link">Read on &rarr;</a>
+		<a href="/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/" class="more-link">Read on</a>
 	</div>
 
 
@@ -306,7 +402,7 @@ familiar with.</p>
 
 
 		
-		<a href="/blog/2012/06/05/loading-half-a-billion-rows-into-mysql/" class="more-link">Read on &rarr;</a>
+		<a href="/blog/2012/06/05/loading-half-a-billion-rows-into-mysql/" class="more-link">Read on</a>
 	</div>
 
 

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Automation | Causes Engineering]]></title>
+  <link href="http://causes.github.io/blog/categories/automation/atom.xml" rel="self"/>
+  <link href="http://causes.github.io/"/>
+  <updated>2013-05-30T15:54:40-07:00</updated>
+  <id>http://causes.github.io/</id>
+  <author>
+    <name><![CDATA[Causes Engineers]]></name>
+    <email><![CDATA[eng@causes.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Overcommit: The opinionated Git hook manager]]></title>
+    <link href="http://causes.github.io/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/"/>
+    <updated>2013-05-30T14:02:00-07:00</updated>
+    <id>http://causes.github.io/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager</id>
+    <content type="html"><![CDATA[<p>At <a href="http://www.causes.com">Causes</a>, we care deeply about code quality.  We
+promote thorough, offline code review through
+<a href="https://code.google.com/p/gerrit/">Gerrit</a> and take pride in each commit we
+make. Due to the sheer volume of code review and the number of engineers on our
+team, it&rsquo;s important that by the time other engineers review our code we have an
+established baseline of quality.</p>
+
+<p>There are a few important ingredients to making a good commit:</p>
+
+<ul>
+<li>Correctness: The code does what you expect it to do</li>
+<li>Commit message: Tim Pope provides an excellent summary of <a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html">what makes a good
+commit message</a></li>
+<li>Style: The code matches our team&rsquo;s coding styles</li>
+<li>Test coverage: relevant tests have been run, and any new features have spec
+coverage</li>
+</ul>
+
+
+<p>Enter <a href="https://github.com/causes/overcommit">overcommit</a>. This evolved from a
+set single file linter into a full-fledged, extensible hook architecture.
+Available as a Ruby gem:</p>
+
+<pre><code>gem install overcommit
+</code></pre>
+
+<p>What does it do? In short, it automates away all the tedium before a commit
+reaches code review. It ships with a set of opinionated lints that ensure a
+level of consistency and quality in our commits.</p>
+
+<h2>In Action</h2>
+
+<p>Here&rsquo;s an example of overcommit saving me from committing janky code:</p>
+
+<pre><code>❯❯❯ echo "eval('alert(\"hello world\")');" > eval.js
+❯❯❯ git add eval.js
+❯❯❯ git commit
+Running pre_commit checks
+  Checking causes_email...........<span class="success">OK</span>
+  Checking test_history...........<span class="warning">No relevant tests for this change...write some?</span>
+  Checking restricted_paths.......<span class="success">OK</span>
+  Checking js_console_log.........<span class="success">OK</span>
+  Checking js_syntax..............<span class="error">FAILED</span>
+    ERROR in eval.js at 1:1
+
+        eval is evil.
+
+        eval('alert("hello world")');
+
+  Checking author_name............<span class="success">OK</span>
+  Checking whitespace.............<span class="success">OK</span>
+
+<span class="error">!!! One or more pre_commit checks failed</span>
+</code></pre>
+
+
+
+
+<!-- more -->
+
+
+<h2>Installation</h2>
+
+<p>After installing the gem, a new binary, <code>overcommit</code>, will be available. You can
+use this binary to install git hooks into an existing repository like so:</p>
+
+<pre><code>overcommit my-project
+</code></pre>
+
+<p>Where <code>my-project</code> is the directory of a git repository. In addition to
+installing hooks into <code>my-project/.git/hooks</code>, this will also write an
+<code>overcommit.yml</code> file containing repository-specific configuration. You can use
+this, for example, to always skip a certain type of lint. See more options by
+running <code>overcommit --help</code>.</p>
+
+<h2>Built-in functionality</h2>
+
+<h4><code>pre-commit</code> hooks</h4>
+
+<ul>
+<li><p><code>haml_syntax</code> verifies that any <a href="http://haml.info/">Haml</a> file to be committed
+is syntactially valid.</p></li>
+<li><p><code>js_syntax</code> uses <a href="http://www.jshint.com/">jshint</a> to ensure best JavaScript
+practices are followed.</p></li>
+<li><p><code>ruby_syntax</code> makes sure that any Ruby files to be committed are syntactically
+valid by  running <code>ruby -c #{staged_file}</code>.</p></li>
+<li><p><code>scss_lint</code> integrates with our <a href="github.com/causes/scss-lint">scss-lint</a> gem
+to ensure our stylesheets are the best they can be. This includes alphabetizing
+properties, removing unnecessary units, and so much more. <a href="https://github.com/causes/scss-lint#what-gets-linted">Read
+more</a> about what gets
+linted.</p></li>
+<li><p><code>whitespace</code> verifies that no hard tabs are used and that no trailing
+whitespace is included. The devil is in the details.</p></li>
+</ul>
+
+
+<p>There are more hooks included, including Causes-specific ones (such as making
+sure your @causes.com email address is used), but these are excluded by
+default. See the rest of the lints
+<a href="https://github.com/causes/overcommit/tree/master/lib/overcommit/plugins/pre_commit">here</a>.</p>
+
+<h4><code>commit-msg</code> hooks</h4>
+
+<ul>
+<li><p><code>russian_novel</code> is just for fun, to reward developers for writing exemplary
+(long) commit messages.</p></li>
+<li><p><code>text_width</code> ensures that the body of the commit is hard-wrapped to 72
+characters, and that the subject is &lt;= 60 characters.</p></li>
+<li><p><code>trailing_period</code> warns the author if their commit message subject ends with a period.</p></li>
+</ul>
+
+
+<h2>Extensibility</h2>
+
+<p>In addition to the gem-provided, global hooks, <code>overcommit</code> also allows for
+repository-specific hooks to be added. An example from the documentation is our
+<a href="http://www.opscode.com/chef/">Chef</a> repository-specific hook to run
+<a href="http://acrmp.github.io/foodcritic/">Foodcritic</a> against any cookbooks being
+committed.</p>
+
+<p>This file lives in kitchen.git/.githooks/pre_commit/food_critic.rb</p>
+
+<p>```ruby food_critic.rb
+module Overcommit::GitHook
+  class FoodCritic &lt; HookSpecificCheck</p>
+
+<pre><code>include HookRegistroy
+COOKBOOKS = 'cookbooks'
+@@options = { :tags =&gt; %w[~readme ~fc001] }
+
+def run_check
+  begin
+    require 'foodcritic'
+  rescue LoadError
+    return :stop, 'run `bundle install` to install the foodcritic gem'
+  end
+
+  changed_cookbooks = modified_files.map do |file|
+    file.split('/')[0..1].join('/') if file.start_with? COOKBOOKS
+  end.compact.uniq
+
+  linter = ::FoodCritic::Linter.new
+  review = linter.check(changed_cookbooks, @@options)
+  return (review.warnings.any? ? :bad : :good), review
+end
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<h2>Skipping checks</h2>
+
+<p>There are, of course, times when you&rsquo;re going to need to break the rules. You
+can skip any lint by passing the underscore-ized name into the <code>SKIP_CHECKS</code>
+environment variable. This can either be a single lint, or a
+comma/colon-separated list of lints to skip:</p>
+
+<pre><code>SKIP_CHECKS=js_syntax:restricted_paths git commit
+</code></pre>
+
+<p>There&rsquo;s also the special value of <code>all</code>, which will skip all of the non-required
+lints.</p>
+
+<h2>The future</h2>
+
+<p>Until recently, overcommit has only been useful inside Causes due to the
+specific lints we run and the lack of easy installation. We hope others find it
+useful, and have released it under the MIT license. Pull requests are welcome.</p>
+
+<p>Happy hacking.</p>
+]]></content>
+  </entry>
+  
+</feed>
