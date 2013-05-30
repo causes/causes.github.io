@@ -34,4 +34,4 @@ bugs, and increased developer velocity. When you have finished reading this, I
 hope that you will have a few more tools to help move your codebase toward
 greater maintainability.
 
-[Read on &rarr;](http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/)
+<a class="more-link" href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/">Read on</a>
