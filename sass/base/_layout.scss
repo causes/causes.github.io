@@ -5,7 +5,7 @@ $max-width: 1000px;
 	padding: 0;
 }
 body{
-	font-family: "proxima-nova-1", "proxima-nova-2", "Helvetica Neue", Arial, sans-serif;
+	font-family: $font-default;
 	font-size: 16px;
 	font-weight: 300;
 	line-height: 1.5;
