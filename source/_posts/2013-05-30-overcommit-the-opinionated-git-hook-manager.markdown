@@ -25,8 +25,8 @@ There are a few important ingredients to making a good commit:
     coverage
 
 Enter [overcommit](https://github.com/causes/overcommit). This evolved from a
-set single file linter into a full-fledged, extensible hook architecture.
-Available as a Ruby gem:
+single file linter into a full-fledged, extensible hook architecture.  Available
+as a Ruby gem:
 
     gem install overcommit
 
