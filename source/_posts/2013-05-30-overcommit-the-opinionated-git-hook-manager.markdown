@@ -124,7 +124,7 @@ This file lives in kitchen.git/.githooks/pre_commit/food_critic.rb
 ```ruby food_critic.rb
 module Overcommit::GitHook
   class FoodCritic < HookSpecificCheck
-    include HookRegistroy
+    include HookRegistry
     COOKBOOKS = 'cookbooks'
     @@options = { :tags => %w[~readme ~fc001] }
 
