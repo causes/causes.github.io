@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-30T15:54:40-07:00</updated>
+  <updated>2013-05-30T17:21:45-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -186,7 +186,8 @@ lints.</p>
 
 <p>Until recently, overcommit has only been useful inside Causes due to the
 specific lints we run and the lack of easy installation. We hope others find it
-useful, and have released it under the MIT license. Pull requests are welcome.</p>
+useful, and have released it under the MIT license. Pull requests are welcome.
+<a href="https://github.com/causes/overcommit">View the source on GitHub</a>.</p>
 
 <p>Happy hacking.</p>
 ]]></content>
