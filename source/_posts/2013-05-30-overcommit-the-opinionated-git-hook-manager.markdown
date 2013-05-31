@@ -164,5 +164,6 @@ lints.
 Until recently, overcommit has only been useful inside Causes due to the
 specific lints we run and the lack of easy installation. We hope others find it
 useful, and have released it under the MIT license. Pull requests are welcome.
+[View the source on GitHub](https://github.com/causes/overcommit).
 
 Happy hacking.
