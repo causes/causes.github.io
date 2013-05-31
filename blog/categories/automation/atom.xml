@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-30T17:26:44-07:00</updated>
+  <updated>2013-05-30T17:33:50-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -38,8 +38,8 @@ coverage</li>
 
 
 <p>Enter <a href="https://github.com/causes/overcommit">overcommit</a>. This evolved from a
-set single file linter into a full-fledged, extensible hook architecture.
-Available as a Ruby gem:</p>
+single file linter into a full-fledged, extensible hook architecture.  Available
+as a Ruby gem:</p>
 
 <pre><code>gem install overcommit
 </code></pre>
