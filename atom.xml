@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-05-30T17:34:36-07:00</updated>
+  <updated>2013-05-30T18:24:03-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -165,7 +165,7 @@ committed.</p>
 <span class='line-number'>23</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Overcommit::GitHook</span>
 </span><span class='line'>  <span class="k">class</span> <span class="nc">FoodCritic</span> <span class="o">&lt;</span> <span class="no">HookSpecificCheck</span>
-</span><span class='line'>    <span class="kp">include</span> <span class="no">HookRegistroy</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">HookRegistry</span>
 </span><span class='line'>    <span class="no">COOKBOOKS</span> <span class="o">=</span> <span class="s1">&#39;cookbooks&#39;</span>
 </span><span class='line'>    <span class="vc">@@options</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">:tags</span> <span class="o">=&gt;</span> <span class="sx">%w[~readme ~fc001]</span> <span class="p">}</span>
 </span><span class='line'>
