@@ -18,6 +18,7 @@
 {% endif %}
 
 <div class="meta">
+	{% if post.author %}<div class="author">{{ post.author }}</div>{% endif %}
 	<div class="date">{% include post/date.html %}{{ time }}</div>
 	<div class="tags">{% include post/categories.html %}</div>
 	{% if site.disqus_short_name and site.disqus_show_comment_count == true %}
