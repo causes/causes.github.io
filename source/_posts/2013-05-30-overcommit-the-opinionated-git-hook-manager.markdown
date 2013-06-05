@@ -47,12 +47,9 @@ Running pre_commit checks
   Checking restricted_paths.......<span class="success">OK</span>
   Checking js_console_log.........<span class="success">OK</span>
   Checking js_syntax..............<span class="error">FAILED</span>
-    ERROR in eval.js at 1:1
+    eval.js: line 1, col 1, eval can be harmful.
 
-        eval is evil.
-
-        eval('alert("hello world")');
-
+    1 error
   Checking author_name............<span class="success">OK</span>
   Checking whitespace.............<span class="success">OK</span>
 
