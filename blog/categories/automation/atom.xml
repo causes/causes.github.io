@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-06-04T15:50:13-07:00</updated>
+  <updated>2013-06-04T17:15:39-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -61,12 +61,9 @@ Running pre_commit checks
   Checking restricted_paths.......<span class="success">OK</span>
   Checking js_console_log.........<span class="success">OK</span>
   Checking js_syntax..............<span class="error">FAILED</span>
-    ERROR in eval.js at 1:1
+    eval.js: line 1, col 1, eval can be harmful.
 
-        eval is evil.
-
-        eval('alert("hello world")');
-
+    1 error
   Checking author_name............<span class="success">OK</span>
   Checking whitespace.............<span class="success">OK</span>
 
@@ -98,10 +95,14 @@ running <code>overcommit --help</code>.</p>
 <h4><code>pre-commit</code> hooks</h4>
 
 <ul>
+<li><p><code>coffee_lint</code> uses <a href="http://www.coffeelint.org/">CoffeeLint</a> to keep your
+CoffeeScript clean and consistent.</p></li>
 <li><p><code>haml_syntax</code> verifies that any <a href="http://haml.info/">Haml</a> file to be committed
 is syntactially valid.</p></li>
 <li><p><code>js_syntax</code> uses <a href="http://www.jshint.com/">jshint</a> to ensure best JavaScript
 practices are followed.</p></li>
+<li><p><code>python_flake8</code> uses <a href="https://pypi.python.org/pypi/flake8">flake8</a> to lint
+Python code.</p></li>
 <li><p><code>ruby_syntax</code> makes sure that any Ruby files to be committed are syntactically
 valid by  running <code>ruby -c #{staged_file}</code>.</p></li>
 <li><p><code>scss_lint</code> integrates with our <a href="github.com/causes/scss-lint">scss-lint</a> gem

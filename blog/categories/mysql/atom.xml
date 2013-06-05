@@ -4,7 +4,7 @@
   <title><![CDATA[Category: MySQL | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/mysql/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-06-04T15:50:13-07:00</updated>
+  <updated>2013-06-04T17:15:39-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -198,7 +198,7 @@ familiar with.</p>
 
 <p>MySQL provides the <code>mysqldump</code> utility to allow quick dumping to disk:</p>
 
-<p><code>bash
+<p><code>console
 mysqldump -T /var/lib/mysql/database_data database_name
 </code></p>
 
@@ -210,7 +210,7 @@ format that <code>LOAD INFILE</code> will be able to quickly load later on.</p>
 <p>We&rsquo;ll be building the new system with the latest-and-greatest in Percona
 databases on CentOS 6.2:</p>
 
-<p><code>bash
+<p><code>console
 rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
 yum install Percona-Server-shared-compat Percona-Server-client-55 Percona-Server-server-55 -y
 </code></p>
@@ -229,12 +229,12 @@ my.cnf contains a</p>
 
 <p>directive. Make sure /path/to/data is owned by mysql:mysql</p>
 
-<p><code>bash
+<p><code>console
 chown -R mysql.mysql /path/to/data
 </code>
 and run:</p>
 
-<p><code>bash
+<p><code>console
 mysql_install_db --user=mysql --datadir=/path/to/data
 </code></p>
 
@@ -382,7 +382,7 @@ you can query:</p>
 <p>If you want to watch/log the progress over time, you can craft a quick shell
 command to poll the number of rows:</p>
 
-<p><code>bash
+<p><code>console
 $ while :; do mysql -hlocalhost databasename -e "SELECT table_rows FROM information_schema.tables WHERE table_name = 'table' \G ; " | grep rows | cut -d':' -f2 | xargs echo `date +"%F %R"` , | tee load.log &amp;&amp; sleep 30; done
 2012-05-29 18:16 , 32267244
 2012-05-29 18:16 , 32328002
@@ -403,7 +403,7 @@ loading.</p>
 way to have performance degrade to the point of not finishing. I settled on
 using `split' to chunk data into one million rows per file:</p>
 
-<p>```bash
+<p>```console
 for month_table in action<em>.txt; do
 echo &ldquo;$(date) splitting $month_table&hellip;&rdquo;
 split -l 1000000 $month_table curmonth<em>
