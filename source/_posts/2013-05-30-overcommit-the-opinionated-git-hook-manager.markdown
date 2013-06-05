@@ -75,11 +75,17 @@ running `overcommit --help`.
 
 #### `pre-commit` hooks
 
+- `coffee_lint` uses [CoffeeLint](http://www.coffeelint.org/) to keep your
+  CoffeeScript clean and consistent.
+
 - `haml_syntax` verifies that any [Haml](http://haml.info/) file to be committed
   is syntactially valid.
 
 - `js_syntax` uses [jshint](http://www.jshint.com/) to ensure best JavaScript
   practices are followed.
+
+- `python_flake8` uses [flake8](https://pypi.python.org/pypi/flake8) to lint
+  Python code.
 
 - `ruby_syntax` makes sure that any Ruby files to be committed are syntactically
   valid by  running `ruby -c #{staged_file}`.
