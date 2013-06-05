@@ -73,7 +73,7 @@ running `overcommit --help`.
 
 ## Built-in functionality
 
-#### `pre-commit` hooks
+#### pre-commit hooks
 
 - `coffee_lint` uses [CoffeeLint](http://www.coffeelint.org/) to keep your
   CoffeeScript clean and consistent.
@@ -104,7 +104,7 @@ sure your @causes.com email address is used), but these are excluded by
 default. See the rest of the lints
 [here](https://github.com/causes/overcommit/tree/master/lib/overcommit/plugins/pre_commit).
 
-#### `commit-msg` hooks
+#### commit-msg hooks
 
 - `russian_novel` is just for fun, to reward developers for writing exemplary
   (long) commit messages.
