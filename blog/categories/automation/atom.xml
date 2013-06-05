@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-06-04T17:15:39-07:00</updated>
+  <updated>2013-06-04T17:18:27-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -92,7 +92,7 @@ running <code>overcommit --help</code>.</p>
 
 <h2>Built-in functionality</h2>
 
-<h4><code>pre-commit</code> hooks</h4>
+<h4>pre-commit hooks</h4>
 
 <ul>
 <li><p><code>coffee_lint</code> uses <a href="http://www.coffeelint.org/">CoffeeLint</a> to keep your
@@ -120,7 +120,7 @@ sure your @causes.com email address is used), but these are excluded by
 default. See the rest of the lints
 <a href="https://github.com/causes/overcommit/tree/master/lib/overcommit/plugins/pre_commit">here</a>.</p>
 
-<h4><code>commit-msg</code> hooks</h4>
+<h4>commit-msg hooks</h4>
 
 <ul>
 <li><p><code>russian_novel</code> is just for fun, to reward developers for writing exemplary

@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-06-04T17:15:39-07:00</updated>
+  <updated>2013-06-04T17:18:27-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -223,7 +223,7 @@ running <code>overcommit --help</code>.</p>
 
 <h2>Built-in functionality</h2>
 
-<h4><code>pre-commit</code> hooks</h4>
+<h4>pre-commit hooks</h4>
 
 <ul>
 <li><p><code>coffee_lint</code> uses <a href="http://www.coffeelint.org/">CoffeeLint</a> to keep your
@@ -251,7 +251,7 @@ sure your @causes.com email address is used), but these are excluded by
 default. See the rest of the lints
 <a href="https://github.com/causes/overcommit/tree/master/lib/overcommit/plugins/pre_commit">here</a>.</p>
 
-<h4><code>commit-msg</code> hooks</h4>
+<h4>commit-msg hooks</h4>
 
 <ul>
 <li><p><code>russian_novel</code> is just for fun, to reward developers for writing exemplary
@@ -725,7 +725,7 @@ familiar with.</p>
 <p>MySQL provides the <code>mysqldump</code> utility to allow quick dumping to disk:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">mysqldump -T /var/lib/mysql/database_data database_name</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mysqldump -T /var/lib/mysql/database_data database_name
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -739,8 +739,8 @@ databases on CentOS 6.2:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm</span>
-</span><span class='line'><span class="go">yum install Percona-Server-shared-compat Percona-Server-client-55 Percona-Server-server-55 -y</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rpm -Uhv http://www.percona.com/downloads/percona-release/percona-release-0.0-1.x86_64.rpm
+</span><span class='line'>yum install Percona-Server-shared-compat Percona-Server-client-55 Percona-Server-server-55 -y
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -759,14 +759,14 @@ my.cnf contains a</p>
 <p>directive. Make sure /path/to/data is owned by mysql:mysql</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">chown -R mysql.mysql /path/to/data</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>chown -R mysql.mysql /path/to/data
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>and run:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">mysql_install_db --user=mysql --datadir=/path/to/data</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mysql_install_db --user<span class="o">=</span>mysql --datadir<span class="o">=</span>/path/to/data
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -956,14 +956,14 @@ command to poll the number of rows:</p>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">$</span> <span class="k">while</span> :; <span class="k">do </span>mysql -hlocalhost databasename -e <span class="s2">&quot;SELECT table_rows FROM information_schema.tables WHERE table_name = &#39;table&#39; \G ; &quot;</span> | grep rows | cut -d<span class="s1">&#39;:&#39;</span> -f2 | xargs <span class="nb">echo</span> <span class="sb">`</span>date +<span class="s2">&quot;%F %R&quot;</span><span class="sb">`</span> , | tee load.log <span class="o">&amp;&amp;</span> sleep 30; <span class="k">done</span>
-</span><span class='line'><span class="go">2012-05-29 18:16 , 32267244</span>
-</span><span class='line'><span class="go">2012-05-29 18:16 , 32328002</span>
-</span><span class='line'><span class="go">2012-05-29 18:17 , 32404189</span>
-</span><span class='line'><span class="go">2012-05-29 18:17 , 32473936</span>
-</span><span class='line'><span class="go">2012-05-29 18:18 , 32543698</span>
-</span><span class='line'><span class="go">2012-05-29 18:18 , 32616939</span>
-</span><span class='line'><span class="go">2012-05-29 18:19 , 32693198</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="k">while</span> :; <span class="k">do </span>mysql -hlocalhost databasename -e <span class="s2">&quot;SELECT table_rows FROM information_schema.tables WHERE table_name = &#39;table&#39; \G ; &quot;</span> | grep rows | cut -d<span class="s1">&#39;:&#39;</span> -f2 | xargs <span class="nb">echo</span> <span class="sb">`</span>date +<span class="s2">&quot;%F %R&quot;</span><span class="sb">`</span> , | tee load.log <span class="o">&amp;&amp;</span> sleep 30; <span class="k">done</span>
+</span><span class='line'>2012-05-29 18:16 , 32267244
+</span><span class='line'>2012-05-29 18:16 , 32328002
+</span><span class='line'>2012-05-29 18:17 , 32404189
+</span><span class='line'>2012-05-29 18:17 , 32473936
+</span><span class='line'>2012-05-29 18:18 , 32543698
+</span><span class='line'>2012-05-29 18:18 , 32616939
+</span><span class='line'>2012-05-29 18:19 , 32693198
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -995,24 +995,24 @@ using `split&#8217; to chunk data into one million rows per file:</p>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">for month_table in action*.txt; do</span>
-</span><span class='line'><span class="go">echo &quot;$(date) splitting $month_table...&quot;</span>
-</span><span class='line'><span class="go">split -l 1000000 $month_table curmonth_</span>
-</span><span class='line'><span class="go">for segment in curmonth_*; do</span>
-</span><span class='line'><span class="go">  echo &quot;On segment $segment&quot;</span>
-</span><span class='line'><span class="go">  time mysql -hlocalhost action_credit_silo &lt;&lt;-SQL</span>
-</span><span class='line'><span class="go">    SET FOREIGN_KEY_CHECKS = 0;</span>
-</span><span class='line'><span class="go">    SET UNIQUE_CHECKS = 0;</span>
-</span><span class='line'><span class="go">    SET SESSION tx_isolation=&#39;READ-UNCOMMITTED&#39;;</span>
-</span><span class='line'><span class="go">    SET sql_log_bin = 0;</span>
-</span><span class='line'><span class="go">    LOAD DATA INFILE &#39;$segment&#39; INTO TABLE actioncredits</span>
-</span><span class='line'><span class="go">    FIELDS TERMINATED by &#39;\t&#39; ENCLOSED BY &#39;\&quot;&#39;</span>
-</span><span class='line'><span class="go">    (@throwawayId, action, user_id, target_user_id, cause_id, item_type, item_id, activity_id, created_at, utm_campaign) ;</span>
-</span><span class='line'><span class="go">  SQL</span>
-</span><span class='line'><span class="go">    rm $segment</span>
-</span><span class='line'><span class="go">  done</span>
-</span><span class='line'><span class="go">  mv $month_table $month_table.done</span>
-</span><span class='line'><span class="go">done</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">for </span>month_table in action*.txt; <span class="k">do</span>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;$(date) splitting $month_table...&quot;</span>
+</span><span class='line'>split -l 1000000 <span class="nv">$month_table</span> curmonth_
+</span><span class='line'><span class="k">for </span>segment in curmonth_*; <span class="k">do</span>
+</span><span class='line'><span class="k">  </span><span class="nb">echo</span> <span class="s2">&quot;On segment $segment&quot;</span>
+</span><span class='line'>  <span class="nb">time </span>mysql -hlocalhost action_credit_silo <span class="s">&lt;&lt;-SQL</span>
+</span><span class='line'><span class="s">    SET FOREIGN_KEY_CHECKS = 0;</span>
+</span><span class='line'><span class="s">    SET UNIQUE_CHECKS = 0;</span>
+</span><span class='line'><span class="s">    SET SESSION tx_isolation=&#39;READ-UNCOMMITTED&#39;;</span>
+</span><span class='line'><span class="s">    SET sql_log_bin = 0;</span>
+</span><span class='line'><span class="s">    LOAD DATA INFILE &#39;$segment&#39; INTO TABLE actioncredits</span>
+</span><span class='line'><span class="s">    FIELDS TERMINATED by &#39;\t&#39; ENCLOSED BY &#39;\&quot;&#39;</span>
+</span><span class='line'><span class="s">    (@throwawayId, action, user_id, target_user_id, cause_id, item_type, item_id, activity_id, created_at, utm_campaign) ;</span>
+</span><span class='line'><span class="s">  SQL</span>
+</span><span class='line'>    rm <span class="nv">$segment</span>
+</span><span class='line'>  <span class="k">done</span>
+</span><span class='line'><span class="k">  </span>mv <span class="nv">$month_table</span> <span class="nv">$month_table</span>.done
+</span><span class='line'><span class="k">done</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
