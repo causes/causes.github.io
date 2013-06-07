@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-06-04T17:18:27-07:00</updated>
+  <updated>2013-06-07T08:53:37-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -12,6 +12,165 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Showing Color Chips from Sass Variables]]></title>
+    <link href="http://causes.github.io/blog/2013/06/06/showing-color-chips-from-sass-variables/"/>
+    <updated>2013-06-06T07:00:00-07:00</updated>
+    <id>http://causes.github.io/blog/2013/06/06/showing-color-chips-from-sass-variables</id>
+    <content type="html"><![CDATA[<p>At <a href="http://www.causes.com">Causes</a> we like to make our code more maintainable by building reusable
+components. Part of this strategy includes <a href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/#two-or-more-use-a-for">assigning variable names to hex
+colors using Sass</a>. This allows us to more easily reuse the same colors
+everywhere, which improves consistency and makes it easier to re-color the
+entire site when our design needs change.</p>
+
+<p>To increase the visibility of these reusable components, we&rsquo;ve been building
+out a collection of things that designers and engineers can reference, drop in
+to projects, and iterate upon. The code sits next to the rendered version,
+allowing people to easily see the implementation required to produce the
+result. We call this collection the component gallery. It helps us do more with
+less code, be more consistent, and iterate on global changes more easily and
+effectively.</p>
+
+<p>When we started fleshing out the color variables we wanted to use throughout
+the site, it seemed natural to show these colors in the component gallery as
+Pantone color chips. That way, designers could reference the colors that we are
+using, we&rsquo;d have a single place to see that all of the colors look great next
+to each other, and engineers could easily pluck variable names when
+implementing designs to match the mocks.</p>
+
+<p><img src="http://causes.github.io/assets/2013-06-06-pantone-chips.png"></p>
+
+<!-- more -->
+
+
+<p>The quick solution would have had us defining these colors in two places: once
+in Sass, where we actually need to use them, and again in Ruby, where we want
+to render them on a page. However, we sensed that this would be a pain to
+maintain and the two different definitions would quickly fall out of sync.</p>
+
+<p>To resolve these issues, we decided to move our color variables into their own
+Sass partial, and use Sass to parse it to display the colors and their
+variables. Since we like to use <a href="http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html">functions like <code>darken()</code>, <code>lighten()</code>, and
+<code>scale-color()</code></a>, we needed a solution that would actually execute the Sass
+and use the result.</p>
+
+<p>So we built a <a href="http://sass-lang.com/docs/yardoc/Sass/Tree/Visitors/Base.html">Sass Visitor</a> to evaluate variables and return pairs of names
+and values:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">SassVariableEvaluator</span> <span class="o">&lt;</span> <span class="ss">Sass</span><span class="p">:</span><span class="ss">:Tree</span><span class="o">::</span><span class="ss">Visitors</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">visit_comment</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</span><span class='line'>    <span class="c1"># prevents empty arrays from being in the returned array</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">visit_variable</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@environment</span> <span class="o">||=</span> <span class="ss">Sass</span><span class="p">:</span><span class="ss">:Environment</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>    <span class="vi">@environment</span><span class="o">.</span><span class="n">set_local_var</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">expr</span><span class="p">)</span>
+</span><span class='line'>    <span class="o">[</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">expr</span><span class="o">.</span><span class="n">perform</span><span class="p">(</span><span class="vi">@environment</span><span class="p">)</span><span class="o">]</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we have our <code>SassVariableEvaluator</code> visitor evaluate the variables in our
+colors Sass partial:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">color_variables</span>
+</span><span class='line'>  <span class="n">engine</span> <span class="o">=</span> <span class="ss">Sass</span><span class="p">:</span><span class="ss">:Engine</span><span class="o">.</span><span class="n">for_file</span><span class="p">(</span><span class="s1">&#39;path/to/_colors.css.scss&#39;</span><span class="p">,</span> <span class="ss">syntax</span><span class="p">:</span> <span class="ss">:scss</span><span class="p">)</span>
+</span><span class='line'>  <span class="no">SassVariableEvaluator</span><span class="o">.</span><span class="n">visit</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">to_tree</span><span class="p">)</span><span class="o">.</span><span class="n">compact</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Looping over those evaluated variables in our view generates the desired
+markup:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='haml'><span class='line'><span class="nc">.clearfix</span>
+</span><span class='line'>  <span class="p">-</span> <span class="n">color_variables</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="nb">name</span><span class="p">,</span> <span class="n">value</span><span class="o">|</span>
+</span><span class='line'>    <span class="nc">.pantone</span>
+</span><span class='line'>      <span class="nc">.chip</span><span class="p">{</span> <span class="ss">style</span><span class="p">:</span> <span class="s2">&quot;background-color: </span><span class="si">#{</span><span class="n">value</span><span class="si">}</span>;&quot; }
+</span><span class='line'>      <span class="nt">%var</span> $<span class="si">#{</span><span class="nb">name</span><span class="si">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And style them nicely:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='sass'><span class='line'><span class="nc">.pantone</span> <span class="err">{</span>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> box-shadow</span><span class="p">(</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">5</span><span class="kt">px</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mf">.1</span><span class="p">))</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="mh">#eee</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">float</span><span class="o">:</span> <span class="no">left</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">font-size</span><span class="o">:</span> <span class="mi">11</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">margin</span><span class="o">:</span> <span class="mi">0</span> <span class="mi">1</span><span class="kt">em</span> <span class="mi">1</span><span class="kt">em</span> <span class="mi">0</span><span class="err">;</span>
+</span><span class='line'>  <span class="na">width</span><span class="o">:</span> <span class="mi">145</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">&amp;</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">4n</span><span class="o">)</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">margin-right</span><span class="o">:</span> <span class="mi">0</span><span class="err">;</span>
+</span><span class='line'>  <span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nc">.chip</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">background</span><span class="o">:</span> <span class="mh">#f00</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">height</span><span class="o">:</span> <span class="mi">145</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>  <span class="err">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">var</span> <span class="err">{</span>
+</span><span class='line'>    <span class="na">display</span><span class="o">:</span> <span class="no">block</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">font-style</span><span class="o">:</span> <span class="no">normal</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">font-weight</span><span class="o">:</span> <span class="no">bold</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">height</span><span class="o">:</span> <span class="mi">40</span><span class="kt">px</span><span class="err">;</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mf">.75</span><span class="kt">em</span><span class="err">;</span>
+</span><span class='line'>  <span class="err">}</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hashing for the homeless]]></title>
