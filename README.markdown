@@ -39,7 +39,11 @@ To watch and fire up a local server on port 4000:
 
 When you are ready for your post to be reviewed, push to gerrit:
 
-    git push gerrit
+    git push gerrit HEAD:refs/publish/source
+
+To make pushing to the "source" branch the default:
+
+    git config remote.gerrit.push HEAD:refs/publish/source
 
 ### Publishing
 
