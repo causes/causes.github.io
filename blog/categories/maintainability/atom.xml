@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Maintainability | Causes Engineering]]></title>
+  <link href="http://causes.github.io/blog/categories/maintainability/atom.xml" rel="self"/>
+  <link href="http://causes.github.io/"/>
+  <updated>2013-08-08T11:01:26-07:00</updated>
+  <id>http://causes.github.io/</id>
+  <author>
+    <name><![CDATA[Causes Engineers]]></name>
+    <email><![CDATA[eng@causes.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Managing side-effects with the Pub-Sub model]]></title>
+    <link href="http://causes.github.io/blog/2013/08/08/managing-side-effects-with-the-publish-subscribe-model/"/>
+    <updated>2013-08-08T10:00:00-07:00</updated>
+    <id>http://causes.github.io/blog/2013/08/08/managing-side-effects-with-the-publish-subscribe-model</id>
+    <content type="html"><![CDATA[<p>Over time, large-scale object-oriented systems tend to produce <a href="http://en.wikipedia.org/wiki/God_object">God
+Objects</a>. These are classes which know
+too much or do too much. They have connections to disparate and varied parts of
+the system. They depend on everything, and everything depends on them. They make
+systems slow to work with, intractable and hard to modify. They insidiously
+undermine and resist our efforts to carry out our core task as engineers:
+decomposing complex problems into smaller subproblems that are more easily
+solved.</p>
+
+<p>At <a href="http://www.causes.com">Causes</a> there are some concepts that are
+front-and-center in our product: users, their campaigns and the actions
+they create to make an impact (things like petitions, fundraisers and pledges).
+The concepts are so core that they have a tendency to become God Objects unless
+we diligently work to prevent them accruing more and more functionality.</p>
+
+<p>We&rsquo;ve lately applied the
+<a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">Pub-Sub</a>
+(Publish-Subscribe) model to our Ruby code, applying the familiar event-based
+patterns that we know from JavaScript to the server side, in an effort to reduce
+the tight coupling that some of these God Objects have to other parts of the
+system. With a simple, framework-agnostic Ruby library, we&rsquo;ve been able to
+significantly tame some of the complexity around these classes, and we&rsquo;ve
+released it as a Ruby gem, <a href="https://github.com/causes/pubsubhub">PubSubHub</a>.</p>
+
+<!-- more -->
+
+
+<h2>A case study in managing side-effects: taking action</h2>
+
+<p>When a user takes action on our site by, say, signing a petition, there is
+potentially a slew of side-effects:</p>
+
+<ul>
+<li>we persist a record of the signature to a <code>signatures</code> table in the
+database, and an <code>ActionCredit</code> (effectively a hundreds-of-millions-of-rows
+journal of all action-taking activity on our site)</li>
+<li>counter-caches tick up</li>
+<li>stats events are generated and dispatched to one or more tracking systems</li>
+<li>a recruiter may receive an on-site notification or an email</li>
+<li>invitations may be marked as accepted (in the case of the recruiter) or
+&ldquo;indirectly accepted&rdquo; (in the case of other, multiple inviters)</li>
+<li>Facebook Request objects may be cleared out</li>
+<li>feed events are generated and propagated to feeds</li>
+<li>a custom <a href="https://developers.facebook.com/docs/opengraph/">Open Graph</a>
+action is published</li>
+<li>if the action pushed the campaign over a milestone, a milestone event may be
+generated, which itself could result in feed events being propagated, onsite
+notifications, and an email to the campaign organizer</li>
+<li>if the action is sponsored by a brand, the signature could trigger a
+donation to a nonprofit (which itself would have other side-effects)</li>
+</ul>
+
+
+<p>And this is only scratching the surface. Having the <code>Action</code> class know about
+all these collaborators effectively makes it depend on them just as much as they
+depend on it, and it places the class squarely within &ldquo;God Object&rdquo; territory.</p>
+
+<h2>Using PubSubHub</h2>
+
+<p>With <code>PubSubHub</code> we have a centralized registry of events, together with the
+listeners that wish to be informed of those events. Our <code>Action</code> class now just
+has to make a call to <code>PubSubHub.trigger</code> to let its collaborators know that
+something important happened:</p>
+
+<p>```ruby
+def take_action(user, recruiter, options = {})
+  # core action-taking mechanics go here&hellip;</p>
+
+<p>  # and secondary side-effects occur as a result of&hellip;
+  PubSubHub.trigger :took_action, self, metadata
+end
+```</p>
+
+<p>This greatly reduces the clutter and makes the separation between core mechanics
+and secondary side-effects clear.</p>
+
+<p>Listener registration looks like this:</p>
+
+<p>```ruby
+PubSubHub.register(
+  took_action: [</p>
+
+<pre><code>{ listener: AlertBanner,                  async: false },
+{ listener: FacebookRequest,              async: true  },
+{ listener: InvitationManager,            async: false },
+{ listener: Profile,                      async: true  },
+{ listener: StatsManager,                 async: true  },
+{ listener: AnalyticsManager,             async: false },
+{ listener: Campaign,                     async: false },
+{ listener: NotificationDistributor,      async: false },
+# etc ...
+</code></pre>
+
+<p>  ],
+  # other event types here&hellip;
+)
+```</p>
+
+<p>We considered making listener registration more distributed, via a DSL that
+could be sprinkled into other classes, but in the end having the central
+registry provides us with a nice inventory of the relationships and dependencies
+between different parts of the system. It also conveniently avoids load-order
+issues in the context of a large Rails app, whose loading behavior (eager vs
+lazy, cached vs uncached) is different between development and production; we
+can just stick the registration in an initializer and be done with it.</p>
+
+<p>Note that with this change we&rsquo;ve inverted the dependencies such that the
+all-important <code>Action</code> class no longer depends on a bunch of other classes;
+rather, those other classes depend on it. From the perspective of the <code>Action</code>
+class, this is a good thing: if your goal is to build something that is both
+robust and useful, depending on as little as possible and having others depend
+on you is a good thing.</p>
+
+<p>One other nicety of this system is that it gives us a straight-forward way to
+divide side-effects into the urgent and the non-urgent, the latter being run
+asynchronously.</p>
+
+<p>The final piece of the puzzle are the various listeners. By convention, they
+implement a handler of the form <code>handle_&lt;event_name&gt;</code>:</p>
+
+<p>```ruby
+def handle_took_action(action, metadata)
+  return unless campaign = action.campaign
+  return unless user     = metadata[:user]</p>
+
+<p>  Follow.where(followed_id:   campaign,</p>
+
+<pre><code>           followed_type: Campaign,
+           user_id:       user).first_or_create!
+</code></pre>
+
+<p>end
+```</p>
+
+<h2>Next steps</h2>
+
+<p>This slender little library has allowed us to scoop out a lot of functionality
+from our <code>Action</code> class, making it significantly less god-like. New engineers
+are able to arrive in the implementation file for the first time and comprehend
+the core structure and functionality more rapidly, free from the distraction of
+a bunch of secondary and tertiary side-effects.</p>
+
+<p>If you&rsquo;d like to see what PubSubHub can do for your code base, it&rsquo;s only a <code>gem
+install pubsubhub</code> away, and the <a href="https://github.com/causes/pubsubhub">source
+code</a> is up on GitHub.</p>
+
+<p>We&rsquo;re mindful that to the person with a hammer, everything looks like a nail, so
+we&rsquo;re careful to ensure that we use the tool judiciously. In the context of a
+Rails application, this means that we continue to make use of Rails' built-in
+tools for managing side effects (things like <a href="http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html">Active Record life-cycle
+callbacks</a>,
+<a href="https://github.com/rails/rails-observers">observers</a>, and <a href="http://api.rubyonrails.org/classes/ActiveSupport/Notifications.html">Active Support
+Notifications</a>).</p>
+
+<p>Additionally, our eyes are ever on the prize, asking the question, &ldquo;How can we
+make this simpler?&rdquo; The Pub-Sub pattern is a tool for loosening the coupling
+between parts of the system, but it does not entirely eliminate that coupling.
+<a href="http://firstround.com/article/The-one-cost-engineers-and-product-managers-dont-consider">Complexity</a>
+is the ultimate enemy, and the best way to manage side-effects is to simply
+eliminate them in the first place.</p>
+]]></content>
+  </entry>
+  
+</feed>

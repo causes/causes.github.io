@@ -7,8 +7,9 @@
 
 <meta name="author" content="Causes Engineers">
 
-<meta name="description" content="At Causes we like to make our code more maintainable by building reusable
-components. Part of this strategy includes assigning variable names to hex &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Over time, large-scale object-oriented systems tend to produce God
+Objects. These are classes which know
+too much or do too much. They have &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -62,6 +63,73 @@ components. Part of this strategy includes assigning variable names to hex &hell
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2013/08/08/managing-side-effects-with-the-publish-subscribe-model/">
+		
+			Managing Side-effects With the Pub-Sub Model</a>
+	</h2>
+	<div class="entry-content">
+		<p>Over time, large-scale object-oriented systems tend to produce <a href="http://en.wikipedia.org/wiki/God_object">God
+Objects</a>. These are classes which know
+too much or do too much. They have connections to disparate and varied parts of
+the system. They depend on everything, and everything depends on them. They make
+systems slow to work with, intractable and hard to modify. They insidiously
+undermine and resist our efforts to carry out our core task as engineers:
+decomposing complex problems into smaller subproblems that are more easily
+solved.</p>
+
+<p>At <a href="http://www.causes.com">Causes</a> there are some concepts that are
+front-and-center in our product: users, their campaigns and the actions
+they create to make an impact (things like petitions, fundraisers and pledges).
+The concepts are so core that they have a tendency to become God Objects unless
+we diligently work to prevent them accruing more and more functionality.</p>
+
+<p>We&rsquo;ve lately applied the
+<a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">Pub-Sub</a>
+(Publish-Subscribe) model to our Ruby code, applying the familiar event-based
+patterns that we know from JavaScript to the server side, in an effort to reduce
+the tight coupling that some of these God Objects have to other parts of the
+system. With a simple, framework-agnostic Ruby library, we&rsquo;ve been able to
+significantly tame some of the complexity around these classes, and we&rsquo;ve
+released it as a Ruby gem, <a href="https://github.com/causes/pubsubhub">PubSubHub</a>.</p>
+
+
+		
+		<a href="/blog/2013/08/08/managing-side-effects-with-the-publish-subscribe-model/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Greg Hurrell</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-08T10:00:00-07:00" pubdate data-updated="true">Aug 8<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/architecture/'>Architecture</a>, <a class='category' href='/blog/categories/maintainability/'>Maintainability</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="http://joelencioni.com/blog/2013/06/06/showing-color-chips-from-sass-variables/">
 		
 			Showing Color Chips From Sass Variables</a>
@@ -97,7 +165,9 @@ implementing designs to match the mocks.</p>
 
 
 <div class="meta">
+	
 	<div class="author">Joe Lencioni</div>
+	
 	<div class="date">
 
 
@@ -179,7 +249,9 @@ generational does real harm because it encourages waiting while we might act.</p
 
 
 <div class="meta">
+	
 	<div class="author">Jeremy Dunck</div>
+	
 	<div class="date">
 
 
@@ -275,7 +347,9 @@ Running pre_commit checks
 
 
 <div class="meta">
+	
 	<div class="author">Aiden Scandella</div>
+	
 	<div class="date">
 
 
@@ -332,7 +406,9 @@ a full second on our pages.</p>
 
 
 <div class="meta">
+	
 	<div class="author">Joe Lencioni</div>
+	
 	<div class="date">
 
 
@@ -397,7 +473,9 @@ greater maintainability.</p>
 
 
 <div class="meta">
+	
 	<div class="author">Joe Lencioni</div>
+	
 	<div class="date">
 
 
@@ -472,7 +550,9 @@ new table.</p>
 
 
 <div class="meta">
+	
 	<div class="author">Adam Derewecki</div>
+	
 	<div class="date">
 
 
@@ -557,7 +637,9 @@ familiar with.</p>
 
 
 <div class="meta">
+	
 	<div class="author">Adam Derewecki</div>
+	
 	<div class="date">
 
 

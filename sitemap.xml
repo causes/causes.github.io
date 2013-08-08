@@ -2,60 +2,66 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://causes.github.io/blog/2012/06/05/loading-half-a-billion-rows-into-mysql/</loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://causes.github.io/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/
         </loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://causes.github.io/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/
         </loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://causes.github.io/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/
         </loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://causes.github.io/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/
         </loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>http://causes.github.io/blog/2013/06/04/hashing-for-the-homeless/</loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>
             http://causes.github.io/blog/2013/06/06/showing-color-chips-from-sass-variables/
         </loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
-        <loc>http://causes.github.io/archives/</loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <loc>
+            http://causes.github.io/blog/2013/08/08/managing-side-effects-with-the-publish-subscribe-model/
+        </loc>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>http://causes.github.io/blog/archives/</loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>http://causes.github.io/blog/</loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
-        <loc>http://causes.github.io/</loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <loc>http://causes.github.io/archives/</loc>
+        <lastmod>2013-08-08T11:00:42-07:00</lastmod>
     </url>
     <url>
         <loc>http://causes.github.io/robots.txt</loc>
-        <lastmod>2013-06-12T20:17:15-07:00</lastmod>
+        <lastmod>2013-08-08T11:00:43-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://causes.github.io/</loc>
+        <lastmod>2013-08-08T11:00:43-07:00</lastmod>
     </url>
 </urlset>
