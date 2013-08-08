@@ -81,7 +81,7 @@ the state of Facebook's asynchronously loaded API.
 ```javascript
 MyFB = window.MyFB || [];
 
-MyFB.push(['ui', { ... }]);
+MyFB.push(['ui', ...]);
 
 window.fbAsyncInit = function() {
   FB.init({
