@@ -23,6 +23,20 @@ following command:
 This will create a .markdown file in `source/_posts/` that includes the current
 date and a slugified version of the post title.
 
+### Previewing posts
+
+To generate a copy of the static files:
+
+    bundle exec rake generate
+
+To watch for changes to `sass/` and `source/` and re-generate as needed:
+
+    bundle exec rake watch
+
+To watch and fire up a local server on port 4000:
+
+    bundle exec rake preview
+
 When you are ready for your post to be reviewed, push to gerrit:
 
     git push gerrit
