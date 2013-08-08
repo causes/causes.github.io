@@ -7,7 +7,7 @@ repo=`git rev-parse --show-toplevel`
 deploy_dir="$repo/_deploy"
 
 # Look for the current remote
-gerrit_remote=`git config --get remote.gerrit.url`
+gerrit_remote=`git config --get remote.gerrit.url` || true
 [[ -z $gerrit_remote ]] && gerrit_remote=`git config --get remote.origin.url`
 
 if [[ -z $gerrit_remote ]] ; then
