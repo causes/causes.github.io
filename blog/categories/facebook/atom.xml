@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Facebook | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/facebook/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-08-08T11:01:26-07:00</updated>
+  <updated>2013-08-08T16:59:27-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -96,7 +96,7 @@ the state of Facebook&rsquo;s asynchronously loaded API.</p>
 <p>```javascript
 MyFB = window.MyFB || [];</p>
 
-<p>MyFB.push([&lsquo;ui&rsquo;, { &hellip; }]);</p>
+<p>MyFB.push([&lsquo;ui&rsquo;, &hellip;]);</p>
 
 <p>window.fbAsyncInit = function() {
   FB.init({</p>

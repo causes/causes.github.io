@@ -156,7 +156,7 @@ the state of Facebook&rsquo;s asynchronously loaded API.</p>
 <span class='line-number'>13</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">MyFB</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">MyFB</span> <span class="o">||</span> <span class="p">[];</span>
 </span><span class='line'>
-</span><span class='line'><span class="nx">MyFB</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;ui&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="p">...</span> <span class="p">}]);</span>
+</span><span class='line'><span class="nx">MyFB</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="s1">&#39;ui&#39;</span><span class="p">,</span> <span class="p">...]);</span>
 </span><span class='line'>
 </span><span class='line'><span class="nb">window</span><span class="p">.</span><span class="nx">fbAsyncInit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="nx">FB</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
