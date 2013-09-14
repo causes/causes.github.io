@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-08-08T16:59:27-07:00</updated>
+  <updated>2013-09-14T13:28:05-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -12,6 +12,278 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Four Styles of Function Organization]]></title>
+    <link href="http://causes.github.io/blog/2013/09/11/four-styles-of-object-organization/"/>
+    <updated>2013-09-11T13:48:00-07:00</updated>
+    <id>http://causes.github.io/blog/2013/09/11/four-styles-of-object-organization</id>
+    <content type="html"><![CDATA[<p>In object-oriented code, there are several choices for where to put a
+new function, and each choice has its pros and cons.  These choices
+repeat themselves over and over in a codebase, so it&rsquo;s worth reviewing
+the tradeoffs we make on a daily basis.</p>
+
+<!-- more -->
+
+
+<h2>Methods directly on core models</h2>
+
+<p>In <abbr title="Object Oriented Programming">OOP</abbr> frameworks
+like Rails, a method&rsquo;s default home is the class that holds its state.
+Suppose that the <code>User</code> class has Facebook friends, Twitter followers,
+and LinkedIn connections.  The simplest approach is:</p>
+
+<p>```ruby
+class User
+  def facebook_friends; &hellip;; end
+  def twitter_followers; &hellip;; end
+  def linkedin_connections; &hellip;; end
+end</p>
+
+<h1>invocation is:</h1>
+
+<p>user.facebook_friends()
+```</p>
+
+<p>The pros of this arrangement are its simplicity and obviousness.  All of
+the methods on <code>User</code> can be found explicitly listed in the <code>user.rb</code>
+file.</p>
+
+<p>The problem with putting everything in one model is that eventually it
+contains many inessential features.  The pathological case looks like:</p>
+
+<p><code>ruby
+class User
+  def facebook_method0; ...; end
+  def facebook_method1; ...; end
+  def facebook_method2; ...; end
+  def twitter_method0; ...; end
+  def twitter_method1; ...; end
+  def twitter_method2; ...; end
+  def linkedin_method0; ...; end
+  def linkedin_method1; ...; end
+  def linkedin_method2; ...; end
+end
+</code></p>
+
+<p>This is the <strong>obese model</strong> problem.  Too much code in one model and
+too little organization makes a monolithic <code>User</code> class a poor unit of
+organization.  An obese class is hard to understand because it contains
+too much unstructured code inside it.  Consumers of obese classes are
+also harder to understand, because the dependency between the consumer
+and the consumed is defined in terms of a large, imprecise concept (the
+obese model), rather than a small and precise one.</p>
+
+<p>Putting methods directly into core models is a simple, direct and
+default solution that works well for small situations.  By the
+<a href="http://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it">YAGNI</a>
+principle, it is probably still the best place to start.  However for
+large projects, the downsides of this organization start to show.</p>
+
+<p>In Ruby-land, a proliferation of concerns inside an object often leads
+to a second style of code organization: mixins.</p>
+
+<h2>Mixins</h2>
+
+<p>Ruby supports mixins as a form of code reuse and concise organization.
+Mixins declare code separately and then include them directly into
+another class.  For example:</p>
+
+<p>```ruby
+module Facebook
+  def facebook_method0; &hellip;; end
+  def facebook_method1; &hellip;; end
+  def facebook_method2; &hellip;; end
+end</p>
+
+<p>class User
+  include Facebook
+end</p>
+
+<h1>invoking:</h1>
+
+<p>user.facebook_method0()
+```</p>
+
+<p>Mixins can improve both organization and code reuse.  In this example,
+the Facebook-related methods are grouped together in one place, and
+separated out from <code>User</code>.  The <code>Facebook</code> module can then be mixed into
+a variety of other classes.  In this organization, the pros are that the
+related methods are grouped into one place (the <code>Facebook</code> module),
+keeping both the individual concern and the target class (<code>User</code>)
+cleaner.</p>
+
+<p>The first problem with mixins is that <code>User</code> objects now have methods
+that cannot be found directly in <code>User</code>.  In order to figure out how
+<code>User</code> got <code>facebook_method0</code>, and what <code>facebook_method0</code> does, you
+can&rsquo;t see it by looking at <code>User</code>; you have to realize it&rsquo;s getting
+<code>include</code>d, usually by grepping the entire codebase for
+<code>facebook_method0</code> <a href="#notes">&#91;1&#93;</a>, which is unfortunate.  This
+dislocation also increases the chances of method name collision
+between the mixin and the host class.</p>
+
+<p>A second problem with mixins is that they tend to have mysterious and
+implicit dependencies upon their host classes, especially if they were
+first written coupled-into the host, and then extracted without
+generalizing.  Mixins used only once are particularly prone to this
+&ldquo;separation is not organization&rdquo; problem.</p>
+
+<p>From the outside, the mixin solution looks structurally identical to
+just putting all the methods in the object: you see an object with a
+ton of methods on it.  Thus mixin solutions share basic properties
+with a large model, but with a tradeoff:</p>
+
+<ul>
+<li>Better organization of a single concern into a single place</li>
+<li>Some code reusability</li>
+<li>Worse clarity on where methods are coming from</li>
+<li>Often worse clarity on code flow, since mixin methods are interacting
+with base class methods, and you&rsquo;ll find yourself ping-ponging between
+reading the two files.</li>
+</ul>
+
+
+<p>Mixins can make code more concise, and somewhat better organized, but
+often at the cost of the code being much less clear.</p>
+
+<p>Mixins often prompt people to turn to <em>delegation</em>.</p>
+
+<h2>Delegation</h2>
+
+<p>Because mixins are sometimes frustratingly invisible, we also see
+people take an opposing approach: explicitly delegating functionality
+to underlying objects.  The separately concerned functionality goes
+into its own class/module.  For example:</p>
+
+<p>```ruby
+module Facebook
+  def self.method0(user); &hellip;; end
+  def self.method1(user); &hellip;; end
+  def self.method2(user); &hellip;; end
+end</p>
+
+<h1>basic delegation</h1>
+
+<p>class User
+  def facebook_method0</p>
+
+<pre><code>Facebook.method0(self)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def facebook_method1</p>
+
+<pre><code>Facebook.method1(self)
+</code></pre>
+
+<p>  end</p>
+
+<p>  def facebook_method2</p>
+
+<pre><code>Facebook.method2(self)
+</code></pre>
+
+<p>  end
+end</p>
+
+<h1>invoking:</h1>
+
+<p>user.facebook_method0()
+```</p>
+
+<p>The strength of this organization is that the individual <code>Facebook</code>
+concern is clearly organized into its own module, and explicitly
+called from <code>User</code>.  This improves organization, reusability, and
+simplicity of the execution path.  One downside is that <code>User</code> is back
+to having every possible method within it, though most of them are
+mere portals to the separate module.</p>
+
+<p>From the outside the <code>User</code> class still looks the same: it has a ton of
+methods on it.  So the cons for this style of organization remain mostly
+the same as the original &ldquo;shove all the methods in the class.&rdquo;  On the
+plus side, there is slightly less complexity inside <code>User</code> itself,
+because some has been separated out into <code>Facebook</code>.</p>
+
+<p>This is a verbose but somewhat clearer organization of the code&mdash;if
+you like delegation, there are several slightly less verbose
+approaches available <a href="#notes">&#91;2&#93;</a>.  But delegation&rsquo;s
+verbosity and continued coupling of everything into <code>User</code> still call
+out for a better alternative.</p>
+
+<h2>Namespaces</h2>
+
+<p>The persistent problem above is dealing with peripheral functionality
+such as <code>Facebook</code> coupled into core functionality such as <code>User</code>.  Even
+if internally a class has been cleaned up to only delegate methods, the
+external complexity of the class has not improved: consumers of <code>User</code>
+still see a sprawling and complex interface of functions.</p>
+
+<p>We can clean up massive classes to have smaller and more specialized
+interfaces, by splitting up concerns into namespaces like this:</p>
+
+<p>```ruby
+module Facebook
+  def self.method0(user); &hellip;; end
+  def self.method0(user); &hellip;; end
+  def self.method0(user); &hellip;; end
+end</p>
+
+<p>class User
+end</p>
+
+<h1>invoking</h1>
+
+<p>Facebook.method0(user)
+```</p>
+
+<p>The most important part of this arrangement is that instead of methods
+being inside <code>User</code>, they&rsquo;re called from the outside, from <code>Facebook</code>,
+which takes a user.</p>
+
+<p>The pros of this organization are that the separate concern (of
+Facebook, of Twitter, etc.) has finally truly been extracted out of
+<code>User</code>.  There is no crowding inside <code>User</code>, no implicit method
+declarations, and all of the code for Facebook is inside the <code>Facebook</code>
+module.</p>
+
+<p>This addresses most of the original concerns.  The disadvantage in
+this situation are that this could eventually proliferate into many
+fragmented modules, and that there is no longer a single home for for
+user-related method declarations.</p>
+
+<p>Using namespaces has a variety of structural advantages, which we&rsquo;ll
+treat in a different article.  For now we hope to have shown that,
+strictly for basic comprehension, there are tradeoffs worth
+considering for consolidating vs. separating code.</p>
+
+<h2>Conclusion</h2>
+
+<p>Code organization choices are deceptively mundane: they seem like
+small decisions, but have compounding long term impacts on the
+malleability of our code.  Because we think and talk in terms of code,
+clear code help us understand clearly, move quickly and reason
+correctly.  This makes organization a fundamental investment we can
+make in our software.</p>
+
+<h2>Notes</h2>
+
+<p><a name="notes"></a></p>
+
+<p>&#91;1&#93; You can also find a method definition via</p>
+
+<pre><code>my_object.method(:my_method_name).source_location
+</code></pre>
+
+<p>&#91;2&#93; There are terser delegation patterns; Rails comes with a
+  <code>delegate</code> method, and the Ruby standard lib has a <code>Delegator</code>
+  class, a <code>SimpleDelegator</code> class, a <code>Forwardable</code> module, which can
+  all be used for various styles of delegation.</p>
+
+<p>Special thanks to Andrew Berls, Jeremy Dunck, Preston Guillory, Greg
+Hurrell,  Joe Lencioni, and Nebs Petrovic for their thoughts.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Managing side-effects with the Pub-Sub model]]></title>
