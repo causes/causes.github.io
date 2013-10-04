@@ -20,6 +20,14 @@ the `source` branch on Gerrit the default, run:
 
     git config remote.gerrit.push HEAD:refs/publish/source
 
+Since posts go through Gerrit for review, your commit messages need to contain
+Change-Ids. The easiest way to automatically add them to your commit messages
+is by using [Overcommit](https://github.com/causes/overcommit) to manage your
+git hooks for this repo:
+
+    gem install overcommit
+    overcommit --all .
+
 ### Creating posts
 
 You should always be in the `source` branch when writing posts. If you are not
