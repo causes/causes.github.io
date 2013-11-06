@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-10-08T12:17:48-07:00</updated>
+  <updated>2013-11-06T11:41:35-08:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -12,6 +12,162 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Why Test Performance Matters]]></title>
+    <link href="http://causes.github.io/blog/2013/11/06/why-test-performance-matters/"/>
+    <updated>2013-11-06T17:50:00-08:00</updated>
+    <id>http://causes.github.io/blog/2013/11/06/why-test-performance-matters</id>
+    <content type="html"><![CDATA[<p>&ldquo;How fast are your tests?&rdquo;.  Have you ever had that question? Probably not.
+Does performance matter for tests? Yes, and here&rsquo;s why: The time it takes from
+you changing a bit of code until you get feedback on whether or not that code
+works is crucial in knowing if your code is good or not. Let me illustrate by
+two scenarios.</p>
+
+<!-- more -->
+
+
+<h3>Scenario 1: Slow feedback cycle</h3>
+
+<p>Let&rsquo;s say your tests take 20 minutes to run. Some time ago developers got tired
+of running the tests locally so you moved to a model where you run the tests in
+30 minute intervals on your build server. Now you have just commited some code
+that changes the default sort order for getting lists of users from the
+database. You commit and push your code and start working on something else. An
+hour later you get an email: &ldquo;Build failed&rdquo;. You quickly scan through the email
+to see that 7 commits have been pushed since the last build and that this test
+is failing: &ldquo;main_menu_has_correct_items&rdquo;. That doesn&rsquo;t look like your fault
+(right?) so you continue working on that other thing. Meanwhile, two other
+contributors to this build are scratching their heads for hours trying to
+figure out why the menu isn&rsquo;t rendering correctly, only to find out that the
+sort order for users was making the test fail.</p>
+
+<h3>Scenario 2: Rapid feedback cycle</h3>
+
+<p>Your tests are lightning fast. Every time you save your code, tests will be run
+automatically and tell you whether or not you broke something. You change the
+sort order for getting lists of users from the database and notice within
+seconds that the &lsquo;main_menu_has_correct_items&rsquo; test is failing. &ldquo;Strange&rdquo;, you
+think and revert your change just to make sure that it wasn&rsquo;t a fluke. Nope, no
+fluke. The test is now passing. You make your change again and start
+investigating why changing the user sort order had an effect on the main menu.
+You quickly find that the menu was depending on the last item from a list of
+users.</p>
+
+<h2>Speed matters</h2>
+
+<p>The above scenarios should make it obvious that performance matters for tests.
+The examples are taken to the extremes, and you will probably find that your
+company is somewhere in the middle in this spectrum. You might not reach
+instantaneous feedback as in scenario 2, but you can certainly aim to get
+closer to that. At <a href="https://www.causes.com">Causes</a>, we are down to seconds in
+most scenarios. Our entire test suite takes about 5 minutes to run, but clever
+engineers have created a smart tool called <code>relevant-tests</code> that tells you with
+high confidence what tests you need to run, and you can run only those tests in
+seconds through the help of <a href="https://github.com/burke/zeus">Zeus</a>, a
+Rails daemon that speeds up most Rails-related tasks by keeping a runtime
+environment hot at all times, and cloning that environment when you need it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Running a Successful Working Group]]></title>
+    <link href="http://causes.github.io/blog/2013/11/06/running-a-successful-working-group/"/>
+    <updated>2013-11-06T15:24:00-08:00</updated>
+    <id>http://causes.github.io/blog/2013/11/06/running-a-successful-working-group</id>
+    <content type="html"><![CDATA[<p>Giving structure to an agile engineering team is hard. You want people to work
+on the things that they are most interested in without losing focus on the main
+goal of building a great product. No matter how you split your organization
+into teams, you will miss covering certain areas of interest. This is where
+working groups can come into play.</p>
+
+<!-- more -->
+
+
+<p>We are a diverse group of people at <a href="https://www.causes.com">Causes</a>. People
+with different backgrounds, knowledge and interests make up the engineering
+team. Even though product teams collaborate on a daily basis, we’ve noticed
+that members with shared interests wanted to get together in a slightly more
+formal way than over a cup of imported, light roast, deliciously smooth
+pour-over coffee (<a href="https://twitter.com/dgouldin">@dgouldin</a> can tell you more
+about that&hellip;).  This is where working groups come into play.</p>
+
+<p>Running a working group is a great way to gather people with shared interests
+and allow people to strengthen skills within a certain area.  Our working
+groups are made up of individuals with a self-identified interest that they
+share with others. We currently run four working groups that cover Front-end
+Technologies, System Architecture, Testing, and Security. Anyone is welcome to
+join the groups, even people outside the engineering team.</p>
+
+<h2>Goals</h2>
+
+<p>We believe the main goal of a working group is to come up with practices and
+tools that the rest of the organization can benefit from. In our company, we
+often talk about <em>force multipliers</em>. By influencing others, you multiply your
+force. A good working group is a force multiplier. This is what we think is
+part of that mission:</p>
+
+<h3>Export knowledge to the rest of the team</h3>
+
+<p>Members of the working group should strive to have a shared understanding about
+what to use, when to use it, and how to use it. At
+<a href="https://www.causes.com">Causes</a>, this knowledge spreads throughout the
+organization through tech talks, code inspections, blog posts, emails, pair
+programming, and other means of collaboration.</p>
+
+<h3>Resolve controversial decisions</h3>
+
+<p>Let’s face it — building a product inevitably includes having to make
+decisions. These decisions can often be controversial. A working group can help
+you resolve the tension by structuring the decisions that need to be made.</p>
+
+<h3>Identify areas for future research and experimentation</h3>
+
+<p>A working group is a great place for discussing how different practices,
+processes and framework/tools could be used to solve problems. We always
+produce action items at our meeting, and these often aim at investigating some
+area and coming up with a concrete plan to be shared at the next meeting.</p>
+
+<h2>Getting the most out of a working group</h2>
+
+<p>Even though groups are self-organized and voluntary, we have found that some
+structure is important to be successful.</p>
+
+<h3>Meet regularly</h3>
+
+<p>We meet every other week for 30-60 minutes. This should be enough for most
+working groups, but situations may arise that call for more attention, and a
+tighter meeting schedule.</p>
+
+<h3>Stick to an agenda</h3>
+
+<p>Preferably, circulate a meeting agenda ahead of time so that people can prepare
+for the meeting. If you find yourself without having a meeting agenda (we all
+know this can happen&hellip;), spend the first few minutes of the meeting
+collaboratively creating one.</p>
+
+<h3>Keep track of action items</h3>
+
+<p>The first item on the agenda should be following up on action items from the
+previous meeting. During the meeting, take notes on all the action items that
+are decided. Follow up by publishing the meeting notes in written form. This
+can be an email, a document, a wiki article or any other searchable form of
+documentation.</p>
+
+<h3>Use a mailing list</h3>
+
+<p>This is great for circulating meeting notes and action items from the meeting.
+And it’s ideal for discussions that may arise in between meetings. We use
+Google Groups to create and manage our lists.</p>
+
+<p>When expertise is spread out across a product-oriented team, you want the
+subject experts to get together and make decisions. These subject experts can
+then take the decisions out to their respective teams to share the knowledge.
+Working groups help enable this and are a valuable practice for any
+organization that needs to share knowledge that cross-cuts the formal team
+structure.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to avoid designing at the water cooler]]></title>

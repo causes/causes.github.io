@@ -1,0 +1,166 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Why Test Performance Matters &middot; Causes Engineering</title>
+
+<meta name="author" content="Causes Engineers">
+
+<meta name="description" content="&ldquo;How fast are your tests?&rdquo;. Have you ever had that question? Probably not.
+Does performance matter for tests? Yes, and here&rsquo;s why: &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Causes Engineering" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Causes Engineering</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Words</a></li>
+	<li><a href="https://github.com/causes">Code</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Words</a></li>
+	<li><a href="https://github.com/causes">Code</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:causes.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Why Test Performance Matters</h2>
+	<div class="entry-content"><p>&ldquo;How fast are your tests?&rdquo;.  Have you ever had that question? Probably not.
+Does performance matter for tests? Yes, and here&rsquo;s why: The time it takes from
+you changing a bit of code until you get feedback on whether or not that code
+works is crucial in knowing if your code is good or not. Let me illustrate by
+two scenarios.</p>
+
+<!-- more -->
+
+
+<h3>Scenario 1: Slow feedback cycle</h3>
+
+<p>Let&rsquo;s say your tests take 20 minutes to run. Some time ago developers got tired
+of running the tests locally so you moved to a model where you run the tests in
+30 minute intervals on your build server. Now you have just commited some code
+that changes the default sort order for getting lists of users from the
+database. You commit and push your code and start working on something else. An
+hour later you get an email: &ldquo;Build failed&rdquo;. You quickly scan through the email
+to see that 7 commits have been pushed since the last build and that this test
+is failing: &ldquo;main_menu_has_correct_items&rdquo;. That doesn&rsquo;t look like your fault
+(right?) so you continue working on that other thing. Meanwhile, two other
+contributors to this build are scratching their heads for hours trying to
+figure out why the menu isn&rsquo;t rendering correctly, only to find out that the
+sort order for users was making the test fail.</p>
+
+<h3>Scenario 2: Rapid feedback cycle</h3>
+
+<p>Your tests are lightning fast. Every time you save your code, tests will be run
+automatically and tell you whether or not you broke something. You change the
+sort order for getting lists of users from the database and notice within
+seconds that the &lsquo;main_menu_has_correct_items&rsquo; test is failing. &ldquo;Strange&rdquo;, you
+think and revert your change just to make sure that it wasn&rsquo;t a fluke. Nope, no
+fluke. The test is now passing. You make your change again and start
+investigating why changing the user sort order had an effect on the main menu.
+You quickly find that the menu was depending on the last item from a list of
+users.</p>
+
+<h2>Speed matters</h2>
+
+<p>The above scenarios should make it obvious that performance matters for tests.
+The examples are taken to the extremes, and you will probably find that your
+company is somewhere in the middle in this spectrum. You might not reach
+instantaneous feedback as in scenario 2, but you can certainly aim to get
+closer to that. At <a href="https://www.causes.com">Causes</a>, we are down to seconds in
+most scenarios. Our entire test suite takes about 5 minutes to run, but clever
+engineers have created a smart tool called <code>relevant-tests</code> that tells you with
+high confidence what tests you need to run, and you can run only those tests in
+seconds through the help of <a href="https://github.com/burke/zeus">Zeus</a>, a
+Rails daemon that speeds up most Rails-related tasks by keeping a runtime
+environment hot at all times, and cloning that environment when you need it.</p>
+</div>
+
+
+<div class="meta">
+	
+	<div class="author">Henric Trotzig</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-06T17:50:00-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/performance/'>Performance</a>, <a class='category' href='/blog/categories/testing/'>Testing</a>
+
+
+</div>
+	
+</div>
+</article>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    Causes Engineers
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31836-33']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+</body>
+</html>
