@@ -7,7 +7,8 @@
 
 <meta name="author" content="Causes Engineers">
 
-<meta name="description" content="I recently had an experience I expect is common for designers who work at startups: I presented a well-polished mockup to a key stakeholder late in &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="A mobile-first approach to design can be good: it helps you focus and
+potentially simplify your requirements, which can translate into a better user &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -56,6 +57,163 @@
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="http://joelencioni.com/blog/2013/11/29/sassy-progressive-enhancement/">
+		
+			Sassy Progressive Enhancement</a>
+	</h2>
+	<div class="entry-content">
+		<p>A mobile-first approach to design can be good: it helps you focus and
+potentially simplify your requirements, which can translate into a better user
+experience. Likewise, a mobile-first approach to implementation can be good: it
+puts the more expensive tasks on the shoulders of clients that are more likely
+to be able to handle the extra load, which can also translate to a better user
+experience.</p>
+
+<p>At <a href="https://www.causes.com">Causes</a>, we have been building things with a mobile-first approach both
+in terms of design and implementation with a goal of progressive enhancement.
+Since switching to this mode on the technical side, we have noticed that our
+code is easier to write and more coherent to read, both of which are big
+benefits for the engineering team.</p>
+
+<p>So we&rsquo;ve put together a little project that helps us write readable media
+queries in this way. We call it <a href="https://github.com/causes/sass-enhance">sass-enhance</a>.</p>
+
+
+		
+		<a href="/blog/2013/11/29/sassy-progressive-enhancement/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Joe Lencioni</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-29T15:50:00-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/media-queries/'>Media queries</a>, <a class='category' href='/blog/categories/progressive-enhancement/'>Progressive enhancement</a>, <a class='category' href='/blog/categories/sass/'>Sass</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/11/06/why-test-performance-matters/">
+		
+			Why Test Performance Matters</a>
+	</h2>
+	<div class="entry-content">
+		<p>&ldquo;How fast are your tests?&rdquo;.  Have you ever had that question? Probably not.
+Does performance matter for tests? Yes, and here&rsquo;s why: The time it takes from
+you changing a bit of code until you get feedback on whether or not that code
+works is crucial in knowing if your code is good or not. Let me illustrate by
+two scenarios.</p>
+
+
+		
+		<a href="/blog/2013/11/06/why-test-performance-matters/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Henric Trotzig</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-06T17:50:00-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/performance/'>Performance</a>, <a class='category' href='/blog/categories/testing/'>Testing</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/11/06/running-a-successful-working-group/">
+		
+			Running a Successful Working Group</a>
+	</h2>
+	<div class="entry-content">
+		<p>Giving structure to an agile engineering team is hard. You want people to work
+on the things that they are most interested in without losing focus on the main
+goal of building a great product. No matter how you split your organization
+into teams, you will miss covering certain areas of interest. This is where
+working groups can come into play.</p>
+
+
+		
+		<a href="/blog/2013/11/06/running-a-successful-working-group/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Henric Trotzig</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-06T15:24:00-08:00" pubdate data-updated="true">Nov 6<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/agile/'>Agile</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -526,239 +684,10 @@ a full second on our pages.</p>
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/">
-		
-			10 Easy Ways to Craft More Readable CSS</a>
-	</h2>
-	<div class="entry-content">
-		<blockquote><p>Always code as if the [person] who ends up maintaining your code will be a
-violent psychopath who knows where you live. Code for readability.
-—<cite><a href="https://groups.google.com/d/msg/comp.lang.c++/rYCO5yn4lXw/oITtSkZOtoUJ">John Woods</a></cite></p></blockquote>
-
-<p>Diving into a large, old piece of CSS typically is neither easy nor
-pleasurable. I find that <strong>the biggest challenges in working with old CSS often
-lie in understanding the purpose and interactions of the styles</strong>.</p>
-
-<p>When styling new elements, we have the entire context of the implementation
-immediately available, and it is easy to write styles that make sense to us at
-that very moment. However, in a few weeks or to a fresh pair of eyes, what made
-a lot of sense at first might end up being a lot more cryptic. Without a clear
-understanding of the purpose and interactions of the styles, modifying
-stylesheets can be dangerous, tedious, and cumbersome. Therefore, it is
-important to communicate enough context so that future developers will be able
-to grok the code easily and make informed decisions.</p>
-
-<p>At <a href="http://www.causes.com/">Causes</a>, we have adopted the following practices
-which we believe have improved the maintainability of our stylesheets, reduced
-bugs, and increased developer velocity. When you have finished reading this, I
-hope that you will have a few more tools to help move your codebase toward
-greater maintainability.</p>
-
-<p><a class="more-link" href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/">Read on</a></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	
-	<div class="author">Joe Lencioni</div>
-	
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-16T15:45:00-07:00" pubdate data-updated="true">Mar 16<span>th</span>, 2013</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/css/'>CSS</a>, <a class='category' href='/blog/categories/readability/'>Readability</a>, <a class='category' href='/blog/categories/sass/'>Sass</a>, <a class='category' href='/blog/categories/stylesheets/'>Stylesheets</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/">
-		
-			Even Faster: Loading Half a Billion Rows in MySQL Revisited</a>
-	</h2>
-	<div class="entry-content">
-		<p>A few months ago, I wrote a post on loading 500 million rows into a single
-innoDB table from flatfiles. This was in the effort to un-‘optimize’ a premature
-optimization in our codebase: user action credits were being stored in monthly
-sharded tables to keep the tables small and performant. As our use of the code
-changed, we found more and more that we had to do a query for each month to see
-if a user had taken an action. We implemented some performance optimizations
-(mainly memcaching values from prior months as they are immutable), but it was
-still overly complicated and prone to bugs. Since we had another table that was
-900m rows, it seemed reasonable to collapse these shards into one 500m row
-table.</p>
-
-<p>Since writing the last post, I’ve learned that there’s a much quicker way to
-combine those tables — as long as you already have the data in MySQL. MySQL
-allows for selecting from one table into another via the <code>INSERT INTO ..
-SELECT</code> statement:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">dest_table</span> <span class="p">(</span><span class="k">values</span><span class="p">)</span> <span class="k">SELECT</span> <span class="k">values</span> <span class="k">FROM</span> <span class="n">source_table</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>which might look something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">credits_new</span> <span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">activity_id</span><span class="p">,</span> <span class="n">created_at</span><span class="p">)</span>
-</span><span class='line'><span class="k">SELECT</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">activity_id</span><span class="p">,</span> <span class="n">created_at</span> <span class="k">FROM</span> <span class="n">credits</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This shouldn’t be surprising; an ALTER TABLE on an innoDB table creates a new
-table with the new schema and copies the rows from the old table over to the
-new table.</p>
-
-
-		
-		<a href="/blog/2012/08/21/even-faster-loading-half-a-billion-rows-in-mysql/" class="more-link">Read on</a>
-	</div>
-
-
-<div class="meta">
-	
-	<div class="author">Adam Derewecki</div>
-	
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-08-21T00:00:00-07:00" pubdate data-updated="true">Aug 21<span>st</span>, 2012</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/mysql/'>MySQL</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/06/05/loading-half-a-billion-rows-into-mysql/">
-		
-			Loading Half a Billion Rows Into MySQL</a>
-	</h2>
-	<div class="entry-content">
-		<h2>Background</h2>
-
-<p>We have a legacy system in our production environment that keeps track of when
-a user takes an action on Causes.com (joins a Cause, recruits a friend, etc).
-I say legacy, but I really mean a prematurely-optimized system that I&rsquo;d like
-to make less smart. This 500m record database is split across monthly sharded
-tables. Seems like a great solution to scaling (and it is)&mdash;except that
-we don&rsquo;t need it. And based on our usage pattern (e.g. to count a user&rsquo;s total
-number of actions, we need to do query N tables), this leads to pretty severe
-performance degradation issues. Even with memcache layer sitting in front of
-old month tables, new features keep discovering new N-query performance
-problems.  Noticing that we have another database happily chugging along with
-900 million records, I decided to migrate the existing system into a single
-table setup. The goals were:</p>
-
-<ul>
-<li>Reduce complexity. Querying one table is simpler than N tables.</li>
-<li>Push as much complexity as possible to the database. The wrappers around the
-month-sharding logic in Rails are slow and buggy.</li>
-<li>Increase performance. Also related to one table query being simpler than N.</li>
-</ul>
-
-
-<h2>Alternative Proposed Solutions</h2>
-
-<p><em>MySQL Partitioning:</em>
-This was the most similar to our existing set up, since MySQL internally
-stores the data into different tables. We decided against it because it seemed
-likely that it wouldn&rsquo;t be much faster than our current solution (although
-MySQL can internally do some optimizations to make sure you only look at
-tables that could possibly have data you want). And it&rsquo;s still the same
-complexity we were looking to reduce (and would further be the only database
-set up in our system using partitioning).</p>
-
-<p><em>Redis:</em>
-Not really proposed as an alternative because the full dataset won&rsquo;t fit
-into memory, but something we&rsquo;re considering loading a subset of the data into
-to answer queries that we make a lot that MySQL isn&rsquo;t particularly good at
-(e.g.  &lsquo;which of my friends have taken an action&rsquo; is quick using Redis&rsquo;s built
-in <code>SET UNION</code> function). The new MySQL table might be performant enough that it
-doesn&rsquo;t make sense to build a fast Redis version, so we&rsquo;re avoiding this as
-possible premature optimization, especially with a technology we&rsquo;re not as
-familiar with.</p>
-
-
-		
-		<a href="/blog/2012/06/05/loading-half-a-billion-rows-into-mysql/" class="more-link">Read on</a>
-	</div>
-
-
-<div class="meta">
-	
-	<div class="author">Adam Derewecki</div>
-	
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-05T00:00:00-07:00" pubdate data-updated="true">Jun 5<span>th</span>, 2012</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/mysql/'>MySQL</a>
-
-
-</div>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
+    
+        <a href="/blog/page/2/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>

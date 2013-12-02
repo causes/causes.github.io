@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2013-10-08T12:17:48-07:00</updated>
+  <updated>2013-12-02T14:09:55-08:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -12,6 +12,412 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sassy Progressive Enhancement]]></title>
+    <link href="http://causes.github.io/blog/2013/11/29/sassy-progressive-enhancement/"/>
+    <updated>2013-11-29T15:50:00-08:00</updated>
+    <id>http://causes.github.io/blog/2013/11/29/sassy-progressive-enhancement</id>
+    <content type="html"><![CDATA[<p>A mobile-first approach to design can be good: it helps you focus and
+potentially simplify your requirements, which can translate into a better user
+experience. Likewise, a mobile-first approach to implementation can be good: it
+puts the more expensive tasks on the shoulders of clients that are more likely
+to be able to handle the extra load, which can also translate to a better user
+experience.</p>
+
+<p>At <a href="https://www.causes.com">Causes</a>, we have been building things with a mobile-first approach both
+in terms of design and implementation with a goal of progressive enhancement.
+Since switching to this mode on the technical side, we have noticed that our
+code is easier to write and more coherent to read, both of which are big
+benefits for the engineering team.</p>
+
+<p>So we&rsquo;ve put together a little project that helps us write readable media
+queries in this way. We call it <a href="https://github.com/causes/sass-enhance">sass-enhance</a>.</p>
+
+<!-- more -->
+
+
+<h2>sass-enhance In Action</h2>
+
+<p>sass-enhance defines mixins for media queries, <code>enhance</code> and <code>degrade</code>.</p>
+
+<p>These mixins each take a breakpoint as an argument, and a block of styles to
+apply when that breakpoint is activated. Optionally, you can specify ranged
+breakpoints using <code>until</code>.</p>
+
+<p>Breakpoints can be named, as defined in the <code>$breakpoint-max-widths</code> variable
+(e.g. &ldquo;tablet&rdquo;), or arbitrary widths (e.g. &ldquo;720px&rdquo;).</p>
+
+<h3><code>enhance()</code></h3>
+
+<p>The <code>enhance</code> mixin is used to apply styles to a selector as the viewport gets
+wider. It can be used to progressively enhance a page. We prefer using
+<code>enhance</code> over <code>degrade</code> because it is a mobile-first implementation that tends
+to be simpler in its execution.</p>
+
+<p>To adjust the padding from 1em to 2em at the desktop breakpoint and wider, you
+could use the following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> enhance</span><span class="p">(</span><span class="n">desktop</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which compiles to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@media</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">960px</span><span class="o">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">2em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you wanted to only apply a different amount of padding for only the tablet
+viewport width and nothing wider or narrower, you could use the following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> enhance</span><span class="p">(</span><span class="n">tablet</span> <span class="n">until</span> <span class="n">desktop</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which compiles to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@media</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">641px</span><span class="o">)</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">959px</span><span class="o">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">2em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3><code>degrade()</code></h3>
+
+<p>There are some cases where <code>enhance</code> does not work or make sense. In these
+cases, it is okay to use <code>degrade</code> to gracefully degrade the styles as the
+viewport gets narrower.</p>
+
+<p>To adjust the padding from 2em to 1em at the tablet breakpoint and narrower,
+you could use the following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> degrade</span><span class="p">(</span><span class="n">tablet</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: this produces functionally equivalent styles as the first example.</p>
+
+<p>Likewise, if you wanted to only apply a different amount of padding for only
+the tablet viewport width and nothing wider or narrower, you could use the
+following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> degrade</span><span class="p">(</span><span class="n">tablet</span> <span class="n">until</span> <span class="n">small-tablet</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Installation</h2>
+
+<p>The recommended way to get set up with sass-enhance is via <a href="http://bower.io">Bower</a>, the
+front-end package manager. To do this, simply run:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bower install sass-enhance
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If your project uses Bower to manage its dependencies and you&rsquo;d like to save
+sass-enhance as a dependency in your project&rsquo;s <code>bower.json</code> manifest file, add
+the <code>--save</code> option:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bower install --save sass-enhance
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you have the files locally, you simply need to import it so it is
+available to your stylesheets. At Causes, we are building a Rails app, so we
+symlink sass-enhance into <code>vendor/assets/stylesheets/sass-enhance/</code> and
+<code>@import</code> it ear the top of our SCSS files:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="k">@import</span> <span class="s1">&#39;</span><span class="s2">sass-enhance/sass-enhance&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Configuration</h2>
+
+<p>Although sass-enhance will work just fine right out of the box, you may be
+itching to configure it to fit your needs just right. For this purpose, we have
+included a variable that you can set, called <code>$breakpoint-max-widths</code>. Just
+make sure to set this variable <em>before importing sass-enhance</em> or your settings
+will not work.</p>
+
+<p>This variable is a comma separated list of breakpoint names and max-width
+pairs. You can choose whatever names and widths you prefer. The default is
+something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="na">$breakpoint-max-widths</span><span class="o">:</span> <span class="n">mobile</span>           <span class="mi">360</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">mobile-landscape</span> <span class="mi">500</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">small-tablet</span>     <span class="mi">640</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">tablet</span>           <span class="mi">959</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">desktop</span>          <span class="mi">99999</span><span class="kt">px</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So, if you prefer media queries with more generic names, you are free to
+configure it to suit your needs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="na">$breakpoint-max-widths</span><span class="o">:</span> <span class="n">small</span>  <span class="mi">400</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="no">medium</span> <span class="mi">800</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="no">large</span>  <span class="mi">1000</span><span class="kt">px</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>We hope that you find this tool useful. Pull requests are welcome. <a href="https://github.com/causes/sass-enhance">View the
+source on GitHub</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Why Test Performance Matters]]></title>
+    <link href="http://causes.github.io/blog/2013/11/06/why-test-performance-matters/"/>
+    <updated>2013-11-06T17:50:00-08:00</updated>
+    <id>http://causes.github.io/blog/2013/11/06/why-test-performance-matters</id>
+    <content type="html"><![CDATA[<p>&ldquo;How fast are your tests?&rdquo;.  Have you ever had that question? Probably not.
+Does performance matter for tests? Yes, and here&rsquo;s why: The time it takes from
+you changing a bit of code until you get feedback on whether or not that code
+works is crucial in knowing if your code is good or not. Let me illustrate by
+two scenarios.</p>
+
+<!-- more -->
+
+
+<h3>Scenario 1: Slow feedback cycle</h3>
+
+<p>Let&rsquo;s say your tests take 20 minutes to run. Some time ago developers got tired
+of running the tests locally so you moved to a model where you run the tests in
+30 minute intervals on your build server. Now you have just commited some code
+that changes the default sort order for getting lists of users from the
+database. You commit and push your code and start working on something else. An
+hour later you get an email: &ldquo;Build failed&rdquo;. You quickly scan through the email
+to see that 7 commits have been pushed since the last build and that this test
+is failing: &ldquo;main_menu_has_correct_items&rdquo;. That doesn&rsquo;t look like your fault
+(right?) so you continue working on that other thing. Meanwhile, two other
+contributors to this build are scratching their heads for hours trying to
+figure out why the menu isn&rsquo;t rendering correctly, only to find out that the
+sort order for users was making the test fail.</p>
+
+<h3>Scenario 2: Rapid feedback cycle</h3>
+
+<p>Your tests are lightning fast. Every time you save your code, tests will be run
+automatically and tell you whether or not you broke something. You change the
+sort order for getting lists of users from the database and notice within
+seconds that the &lsquo;main_menu_has_correct_items&rsquo; test is failing. &ldquo;Strange&rdquo;, you
+think and revert your change just to make sure that it wasn&rsquo;t a fluke. Nope, no
+fluke. The test is now passing. You make your change again and start
+investigating why changing the user sort order had an effect on the main menu.
+You quickly find that the menu was depending on the last item from a list of
+users.</p>
+
+<h2>Speed matters</h2>
+
+<p>The above scenarios should make it obvious that performance matters for tests.
+The examples are taken to the extremes, and you will probably find that your
+company is somewhere in the middle in this spectrum. You might not reach
+instantaneous feedback as in scenario 2, but you can certainly aim to get
+closer to that. At <a href="https://www.causes.com">Causes</a>, we are down to seconds in
+most scenarios. Our entire test suite takes about 5 minutes to run, but clever
+engineers have created a smart tool called <code>relevant-tests</code> that tells you with
+high confidence what tests you need to run, and you can run only those tests in
+seconds through the help of <a href="https://github.com/burke/zeus">Zeus</a>, a
+Rails daemon that speeds up most Rails-related tasks by keeping a runtime
+environment hot at all times, and cloning that environment when you need it.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Running a Successful Working Group]]></title>
+    <link href="http://causes.github.io/blog/2013/11/06/running-a-successful-working-group/"/>
+    <updated>2013-11-06T15:24:00-08:00</updated>
+    <id>http://causes.github.io/blog/2013/11/06/running-a-successful-working-group</id>
+    <content type="html"><![CDATA[<p>Giving structure to an agile engineering team is hard. You want people to work
+on the things that they are most interested in without losing focus on the main
+goal of building a great product. No matter how you split your organization
+into teams, you will miss covering certain areas of interest. This is where
+working groups can come into play.</p>
+
+<!-- more -->
+
+
+<p>We are a diverse group of people at <a href="https://www.causes.com">Causes</a>. People
+with different backgrounds, knowledge and interests make up the engineering
+team. Even though product teams collaborate on a daily basis, we’ve noticed
+that members with shared interests wanted to get together in a slightly more
+formal way than over a cup of imported, light roast, deliciously smooth
+pour-over coffee (<a href="https://twitter.com/dgouldin">@dgouldin</a> can tell you more
+about that&hellip;).  This is where working groups come into play.</p>
+
+<p>Running a working group is a great way to gather people with shared interests
+and allow people to strengthen skills within a certain area.  Our working
+groups are made up of individuals with a self-identified interest that they
+share with others. We currently run four working groups that cover Front-end
+Technologies, System Architecture, Testing, and Security. Anyone is welcome to
+join the groups, even people outside the engineering team.</p>
+
+<h2>Goals</h2>
+
+<p>We believe the main goal of a working group is to come up with practices and
+tools that the rest of the organization can benefit from. In our company, we
+often talk about <em>force multipliers</em>. By influencing others, you multiply your
+force. A good working group is a force multiplier. This is what we think is
+part of that mission:</p>
+
+<h3>Export knowledge to the rest of the team</h3>
+
+<p>Members of the working group should strive to have a shared understanding about
+what to use, when to use it, and how to use it. At
+<a href="https://www.causes.com">Causes</a>, this knowledge spreads throughout the
+organization through tech talks, code inspections, blog posts, emails, pair
+programming, and other means of collaboration.</p>
+
+<h3>Resolve controversial decisions</h3>
+
+<p>Let’s face it — building a product inevitably includes having to make
+decisions. These decisions can often be controversial. A working group can help
+you resolve the tension by structuring the decisions that need to be made.</p>
+
+<h3>Identify areas for future research and experimentation</h3>
+
+<p>A working group is a great place for discussing how different practices,
+processes and framework/tools could be used to solve problems. We always
+produce action items at our meeting, and these often aim at investigating some
+area and coming up with a concrete plan to be shared at the next meeting.</p>
+
+<h2>Getting the most out of a working group</h2>
+
+<p>Even though groups are self-organized and voluntary, we have found that some
+structure is important to be successful.</p>
+
+<h3>Meet regularly</h3>
+
+<p>We meet every other week for 30-60 minutes. This should be enough for most
+working groups, but situations may arise that call for more attention, and a
+tighter meeting schedule.</p>
+
+<h3>Stick to an agenda</h3>
+
+<p>Preferably, circulate a meeting agenda ahead of time so that people can prepare
+for the meeting. If you find yourself without having a meeting agenda (we all
+know this can happen&hellip;), spend the first few minutes of the meeting
+collaboratively creating one.</p>
+
+<h3>Keep track of action items</h3>
+
+<p>The first item on the agenda should be following up on action items from the
+previous meeting. During the meeting, take notes on all the action items that
+are decided. Follow up by publishing the meeting notes in written form. This
+can be an email, a document, a wiki article or any other searchable form of
+documentation.</p>
+
+<h3>Use a mailing list</h3>
+
+<p>This is great for circulating meeting notes and action items from the meeting.
+And it’s ideal for discussions that may arise in between meetings. We use
+Google Groups to create and manage our lists.</p>
+
+<p>When expertise is spread out across a product-oriented team, you want the
+subject experts to get together and make decisions. These subject experts can
+then take the decisions out to their respective teams to share the knowledge.
+Working groups help enable this and are a valuable practice for any
+organization that needs to share knowledge that cross-cuts the formal team
+structure.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to avoid designing at the water cooler]]></title>

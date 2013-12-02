@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Testing | Causes Engineering]]></title>
+  <link href="http://causes.github.io/blog/categories/testing/atom.xml" rel="self"/>
+  <link href="http://causes.github.io/"/>
+  <updated>2013-12-02T14:09:55-08:00</updated>
+  <id>http://causes.github.io/</id>
+  <author>
+    <name><![CDATA[Causes Engineers]]></name>
+    <email><![CDATA[eng@causes.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why Test Performance Matters]]></title>
+    <link href="http://causes.github.io/blog/2013/11/06/why-test-performance-matters/"/>
+    <updated>2013-11-06T17:50:00-08:00</updated>
+    <id>http://causes.github.io/blog/2013/11/06/why-test-performance-matters</id>
+    <content type="html"><![CDATA[<p>&ldquo;How fast are your tests?&rdquo;.  Have you ever had that question? Probably not.
+Does performance matter for tests? Yes, and here&rsquo;s why: The time it takes from
+you changing a bit of code until you get feedback on whether or not that code
+works is crucial in knowing if your code is good or not. Let me illustrate by
+two scenarios.</p>
+
+<!-- more -->
+
+
+<h3>Scenario 1: Slow feedback cycle</h3>
+
+<p>Let&rsquo;s say your tests take 20 minutes to run. Some time ago developers got tired
+of running the tests locally so you moved to a model where you run the tests in
+30 minute intervals on your build server. Now you have just commited some code
+that changes the default sort order for getting lists of users from the
+database. You commit and push your code and start working on something else. An
+hour later you get an email: &ldquo;Build failed&rdquo;. You quickly scan through the email
+to see that 7 commits have been pushed since the last build and that this test
+is failing: &ldquo;main_menu_has_correct_items&rdquo;. That doesn&rsquo;t look like your fault
+(right?) so you continue working on that other thing. Meanwhile, two other
+contributors to this build are scratching their heads for hours trying to
+figure out why the menu isn&rsquo;t rendering correctly, only to find out that the
+sort order for users was making the test fail.</p>
+
+<h3>Scenario 2: Rapid feedback cycle</h3>
+
+<p>Your tests are lightning fast. Every time you save your code, tests will be run
+automatically and tell you whether or not you broke something. You change the
+sort order for getting lists of users from the database and notice within
+seconds that the &lsquo;main_menu_has_correct_items&rsquo; test is failing. &ldquo;Strange&rdquo;, you
+think and revert your change just to make sure that it wasn&rsquo;t a fluke. Nope, no
+fluke. The test is now passing. You make your change again and start
+investigating why changing the user sort order had an effect on the main menu.
+You quickly find that the menu was depending on the last item from a list of
+users.</p>
+
+<h2>Speed matters</h2>
+
+<p>The above scenarios should make it obvious that performance matters for tests.
+The examples are taken to the extremes, and you will probably find that your
+company is somewhere in the middle in this spectrum. You might not reach
+instantaneous feedback as in scenario 2, but you can certainly aim to get
+closer to that. At <a href="https://www.causes.com">Causes</a>, we are down to seconds in
+most scenarios. Our entire test suite takes about 5 minutes to run, but clever
+engineers have created a smart tool called <code>relevant-tests</code> that tells you with
+high confidence what tests you need to run, and you can run only those tests in
+seconds through the help of <a href="https://github.com/burke/zeus">Zeus</a>, a
+Rails daemon that speeds up most Rails-related tasks by keeping a runtime
+environment hot at all times, and cloning that environment when you need it.</p>
+]]></content>
+  </entry>
+  
+</feed>

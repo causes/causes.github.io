@@ -1,0 +1,359 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Sassy Progressive Enhancement &middot; Causes Engineering</title>
+
+<meta name="author" content="Causes Engineers">
+
+<meta name="description" content="A mobile-first approach to design can be good: it helps you focus and
+potentially simplify your requirements, which can translate into a better user &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Causes Engineering" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Causes Engineering</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Words</a></li>
+	<li><a href="https://github.com/causes">Code</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Words</a></li>
+	<li><a href="https://github.com/causes">Code</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="http://google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:causes.github.io">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Sassy Progressive Enhancement</h2>
+	<div class="entry-content"><p>A mobile-first approach to design can be good: it helps you focus and
+potentially simplify your requirements, which can translate into a better user
+experience. Likewise, a mobile-first approach to implementation can be good: it
+puts the more expensive tasks on the shoulders of clients that are more likely
+to be able to handle the extra load, which can also translate to a better user
+experience.</p>
+
+<p>At <a href="https://www.causes.com">Causes</a>, we have been building things with a mobile-first approach both
+in terms of design and implementation with a goal of progressive enhancement.
+Since switching to this mode on the technical side, we have noticed that our
+code is easier to write and more coherent to read, both of which are big
+benefits for the engineering team.</p>
+
+<p>So we&rsquo;ve put together a little project that helps us write readable media
+queries in this way. We call it <a href="https://github.com/causes/sass-enhance">sass-enhance</a>.</p>
+
+<!-- more -->
+
+
+<h2>sass-enhance In Action</h2>
+
+<p>sass-enhance defines mixins for media queries, <code>enhance</code> and <code>degrade</code>.</p>
+
+<p>These mixins each take a breakpoint as an argument, and a block of styles to
+apply when that breakpoint is activated. Optionally, you can specify ranged
+breakpoints using <code>until</code>.</p>
+
+<p>Breakpoints can be named, as defined in the <code>$breakpoint-max-widths</code> variable
+(e.g. &ldquo;tablet&rdquo;), or arbitrary widths (e.g. &ldquo;720px&rdquo;).</p>
+
+<h3><code>enhance()</code></h3>
+
+<p>The <code>enhance</code> mixin is used to apply styles to a selector as the viewport gets
+wider. It can be used to progressively enhance a page. We prefer using
+<code>enhance</code> over <code>degrade</code> because it is a mobile-first implementation that tends
+to be simpler in its execution.</p>
+
+<p>To adjust the padding from 1em to 2em at the desktop breakpoint and wider, you
+could use the following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> enhance</span><span class="p">(</span><span class="n">desktop</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which compiles to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@media</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">960px</span><span class="o">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">2em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you wanted to only apply a different amount of padding for only the tablet
+viewport width and nothing wider or narrower, you could use the following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> enhance</span><span class="p">(</span><span class="n">tablet</span> <span class="n">until</span> <span class="n">desktop</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which compiles to:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">padding</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@media</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">641px</span><span class="o">)</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">959px</span><span class="o">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">padding</span><span class="o">:</span> <span class="m">2em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3><code>degrade()</code></h3>
+
+<p>There are some cases where <code>enhance</code> does not work or make sense. In these
+cases, it is okay to use <code>degrade</code> to gracefully degrade the styles as the
+viewport gets narrower.</p>
+
+<p>To adjust the padding from 2em to 1em at the tablet breakpoint and narrower,
+you could use the following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> degrade</span><span class="p">(</span><span class="n">tablet</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note: this produces functionally equivalent styles as the first example.</p>
+
+<p>Likewise, if you wanted to only apply a different amount of padding for only
+the tablet viewport width and nothing wider or narrower, you could use the
+following SCSS:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="nc">.my-selector</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">2</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">@include</span><span class="nd"> degrade</span><span class="p">(</span><span class="n">tablet</span> <span class="n">until</span> <span class="n">small-tablet</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="na">padding</span><span class="o">:</span> <span class="mi">1</span><span class="kt">em</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Installation</h2>
+
+<p>The recommended way to get set up with sass-enhance is via <a href="http://bower.io">Bower</a>, the
+front-end package manager. To do this, simply run:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bower install sass-enhance
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If your project uses Bower to manage its dependencies and you&rsquo;d like to save
+sass-enhance as a dependency in your project&rsquo;s <code>bower.json</code> manifest file, add
+the <code>--save</code> option:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>bower install --save sass-enhance
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once you have the files locally, you simply need to import it so it is
+available to your stylesheets. At Causes, we are building a Rails app, so we
+symlink sass-enhance into <code>vendor/assets/stylesheets/sass-enhance/</code> and
+<code>@import</code> it ear the top of our SCSS files:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="k">@import</span> <span class="s1">&#39;</span><span class="s2">sass-enhance/sass-enhance&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Configuration</h2>
+
+<p>Although sass-enhance will work just fine right out of the box, you may be
+itching to configure it to fit your needs just right. For this purpose, we have
+included a variable that you can set, called <code>$breakpoint-max-widths</code>. Just
+make sure to set this variable <em>before importing sass-enhance</em> or your settings
+will not work.</p>
+
+<p>This variable is a comma separated list of breakpoint names and max-width
+pairs. You can choose whatever names and widths you prefer. The default is
+something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="na">$breakpoint-max-widths</span><span class="o">:</span> <span class="n">mobile</span>           <span class="mi">360</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">mobile-landscape</span> <span class="mi">500</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">small-tablet</span>     <span class="mi">640</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">tablet</span>           <span class="mi">959</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="n">desktop</span>          <span class="mi">99999</span><span class="kt">px</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So, if you prefer media queries with more generic names, you are free to
+configure it to suit your needs:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="na">$breakpoint-max-widths</span><span class="o">:</span> <span class="n">small</span>  <span class="mi">400</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="no">medium</span> <span class="mi">800</span><span class="kt">px</span><span class="o">,</span>
+</span><span class='line'>                        <span class="no">large</span>  <span class="mi">1000</span><span class="kt">px</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Conclusion</h2>
+
+<p>We hope that you find this tool useful. Pull requests are welcome. <a href="https://github.com/causes/sass-enhance">View the
+source on GitHub</a>.</p>
+</div>
+
+
+<div class="meta">
+	
+	<div class="author">Joe Lencioni</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-29T15:50:00-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/media-queries/'>Media queries</a>, <a class='category' href='/blog/categories/progressive-enhancement/'>Progressive enhancement</a>, <a class='category' href='/blog/categories/sass/'>Sass</a>
+
+
+</div>
+	
+</div>
+</article>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2013
+
+    Causes Engineers
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-31836-33']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+
+</body>
+</html>
