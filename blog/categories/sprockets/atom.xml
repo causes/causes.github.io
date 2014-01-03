@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Sprockets | Causes Engineering]]></title>
+  <link href="http://causes.github.io/blog/categories/sprockets/atom.xml" rel="self"/>
+  <link href="http://causes.github.io/"/>
+  <updated>2014-01-03T09:48:43-08:00</updated>
+  <id>http://causes.github.io/</id>
+  <author>
+    <name><![CDATA[Causes Engineers]]></name>
+    <email><![CDATA[eng@causes.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Integrating Bower with Rails]]></title>
+    <link href="http://causes.github.io/blog/2014/01/03/integrating-bower-with-rails/"/>
+    <updated>2014-01-03T10:00:00-08:00</updated>
+    <id>http://causes.github.io/blog/2014/01/03/integrating-bower-with-rails</id>
+    <content type="html"><![CDATA[<p>We tend to prefer convention over configuration, so when we first began using
+<a href="http://bower.io/">Bower</a> to manage our front-end dependencies, we started with minimal
+configuration. While this nicely put the files in the expected places, it was a
+hassle actually using the assets in our Rails app.</p>
+
+<p>Our basic initial approach was to symlink the assets that we wanted to
+reference from the <code>bower_components</code> directory into <code>vendor/assets</code> where
+Sprockets would notice them. While this worked in the short term, it was
+tedious to set up new packages, and was likely to break if the required assets
+were moved when upgrading dependencies.</p>
+
+<p>Ultimately, this felt like a hack. We decided that there must be a better way.
+Thankfully there is.</p>
+
+<!-- more -->
+
+
+<h2>Configuring Bower</h2>
+
+<p>To get us out of the clunky situation of managing symlinks, we first wanted
+Bower to store its files in a Railsy location. The right spot for this seemed
+to be <code>vendor/assets/bower_components</code>. We chose <code>vendor/assets</code> because these
+are third-party assets, and <code>bower_components</code> because it makes clear that
+these assets are managed by Bower and shouldn&rsquo;t manually be meddled with.</p>
+
+<p>Bower allows us to configure the directory it stores its files via the
+<code>.bowerrc</code> file. Since we didn&rsquo;t have one yet, all we needed to do was add this
+as a sibling to our <code>bower.json</code> file, which was in our app root:</p>
+
+<p><code>json .bowerrc
+{
+  "directory": "vendor/assets/bower_components"
+}
+</code></p>
+
+<h2>Configuring Rails</h2>
+
+<p>Now that the assets were in a logical place, we wanted Rails to be able to find
+them easily without us having to manage an army of symlinks. In our application
+config, we have access to the list of paths that Sprockets checks for assets
+that are imported in manifests. We simply needed to add the Bower components
+path to that list:</p>
+
+<p><code>ruby config/application.rb
+config.assets.paths &lt;&lt; Rails.root.join('vendor', 'assets', 'bower_components')
+</code></p>
+
+<h2>Using Bower Assets</h2>
+
+<p>Now that we have wired up the critical pieces, we can reference Bower assets in
+manifests, and Sprockets will pull them in for us.</p>
+
+<p><code>js Example application.js
+//= require my_js_file
+//= require bower_component_name/js_file
+</code></p>
+
+<p><code>scss Example application.css.scss
+@import 'mixins';
+@import 'reset';
+@import 'bower_component_name/stylesheet'
+</code></p>
+
+<p>The assets in <code>vendor/assets/bower_components</code> are not precompiled on their own
+so they can only be referenced in manifests and cannot be served directly to
+clients. However, we wanted to serve a couple of components individually and
+not bundled with other assets in a pre-existing manifest, generally either
+because of their size (<a href="http://d3js.org/">D3</a>) or because they were being served only to a subset
+of clients (<a href="https://github.com/scottjehl/Respond">Respond</a>). For these cases, we created shim manifests that only
+include the single file we want served:</p>
+
+<p><code>js Our shim d3.js manifest
+// Shim to coax vendor/assets/bower_components/d3/d3.js to be precompiled by
+// the asset pipeline
+//= require d3/d3
+</code></p>
+
+<h2>Alternatives</h2>
+
+<p>There is a <a href="https://github.com/42dev/bower-rails">bower-rails gem</a> that provides a <acronym title="Domain Specific
+Language">DSL</acronym> that allows you to manage Bower components via a
+Bowerfile, similarly to how <a href="http://bundler.io/">Bundler</a> operates. Although it sounds pretty
+slick, we were hesitant to add another dependency to our stack when the
+alternative outlined above requires so little work to configure.</p>
+
+<p>Additionally, <a href="https://rails-assets.org/">https://rails-assets.org</a> can be added as a gem source to your
+<code>Gemfile</code>, which allows you to reference Bower packages via <code>gem
+'rails-assets-BOWER_PACKAGE_NAME'</code>. We decided against this approach because it
+seemed to add an unnecessary layer of indirection when again, the alternative
+outlined above is so simple.</p>
+]]></content>
+  </entry>
+  
+</feed>

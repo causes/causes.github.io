@@ -7,8 +7,8 @@
 
 <meta name="author" content="Causes Engineers">
 
-<meta name="description" content="A mobile-first approach to design can be good: it helps you focus and
-potentially simplify your requirements, which can translate into a better user &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="We tend to prefer convention over configuration, so when we first began using
+Bower to manage our front-end dependencies, we started with minimal &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -57,6 +57,63 @@ potentially simplify your requirements, which can translate into a better user &
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="http://joelencioni.com/blog/2014/01/03/integrating-bower-with-rails/">
+		
+			Integrating Bower With Rails</a>
+	</h2>
+	<div class="entry-content">
+		<p>We tend to prefer convention over configuration, so when we first began using
+<a href="http://bower.io/">Bower</a> to manage our front-end dependencies, we started with minimal
+configuration. While this nicely put the files in the expected places, it was a
+hassle actually using the assets in our Rails app.</p>
+
+<p>Our basic initial approach was to symlink the assets that we wanted to
+reference from the <code>bower_components</code> directory into <code>vendor/assets</code> where
+Sprockets would notice them. While this worked in the short term, it was
+tedious to set up new packages, and was likely to break if the required assets
+were moved when upgrading dependencies.</p>
+
+<p>Ultimately, this felt like a hack. We decided that there must be a better way.
+Thankfully there is.</p>
+
+
+		
+		<a href="/blog/2014/01/03/integrating-bower-with-rails/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Joe Lencioni</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-03T10:00:00-08:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/asset-pipeline/'>Asset Pipeline</a>, <a class='category' href='/blog/categories/bower/'>Bower</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/sprockets/'>Sprockets</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -625,65 +682,6 @@ Running pre_commit checks
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="http://joelencioni.com/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/">
-		
-			Working With Asynchronously Loaded JavaScript Objects</a>
-	</h2>
-	<div class="entry-content">
-		<p>Telling browsers to load large JavaScripts asynchronously can significantly
-improve performance. This prevents the browser from blocking the rendering of
-the page, allowing it to be viewed more quickly. However, if you are loading
-dependent files asynchronously, such as a third-party service&rsquo;s API, making the
-scripts work together is not automatic.</p>
-
-<p>At <a href="http://www.causes.com">Causes</a> we use Facebook&rsquo;s large (nearly 60 <abbr
-title="Kibibytes">KiB</abbr> gzipped) JavaScript API on our pages. Although
-<a href="https://developers.facebook.com/docs/reference/javascript/#loading">they recommend loading it
-asynchronously</a>,
-we were already putting our JavaScript at the bottom of the page and weren&rsquo;t
-convinced that async would give us much additional benefit. However, after some
-non-scientific performance tests it appeared that switching to asynchronously
-loading the Facebook API could reduce the time to <code>DOMContentLoaded</code> by nearly
-a full second on our pages.</p>
-
-
-		
-		<a href="/blog/2013/05/28/working-with-asynchronously-loaded-javascript-objects/" class="more-link">Read on</a>
-	</div>
-
-
-<div class="meta">
-	
-	<div class="author">Joe Lencioni</div>
-	
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-28T14:00:00-07:00" pubdate data-updated="true">May 28<span>th</span>, 2013</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/asynchronous/'>Asynchronous</a>, <a class='category' href='/blog/categories/facebook/'>Facebook</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
-
-
-</div>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
     
@@ -691,7 +689,7 @@ a full second on our pages.</p>
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2013
+	<footer id="footer" class="inner">Copyright &copy; 2014
 
     Causes Engineers
 
