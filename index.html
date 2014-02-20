@@ -7,8 +7,8 @@
 
 <meta name="author" content="Causes Engineers">
 
-<meta name="description" content="We tend to prefer convention over configuration, so when we first began using
-Bower to manage our front-end dependencies, we started with minimal &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Sally has been tasked with making the commenting feature in her company&rsquo;s
+webapp be threaded up to 5 levels instead of only 2 levels. As she &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -57,6 +57,63 @@ Bower to manage our front-end dependencies, we started with minimal &hellip;"> <
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="http://joelencioni.com/blog/2014/02/19/differentiate-environments-with-different-favicons/">
+		
+			Differentiate Environments With Different Favicons</a>
+	</h2>
+	<div class="entry-content">
+		<p>Sally has been tasked with making the commenting feature in her company&rsquo;s
+webapp be threaded up to 5 levels instead of only 2 levels. As she makes
+adjustments to the code, she collects an unprecedented number of browser tabs.
+Some of them point at her company&rsquo;s production site, while others point at her
+development environment. In many of them, she enabled &ldquo;super-user&rdquo; mode, so she
+could more freely play with her app while making her changes.</p>
+
+<p>So she goes on coding and messing with the data for most of the afternoon.
+She&rsquo;s about ready to wrap up and head home for the evening when her boss walks
+in and asks, &ldquo;Sally, lots of comments have gone missing. Do you know what
+happened?&rdquo; Sally felt like she had swallowed a sack of doorknobs. In the midst
+of her coding spree, she mixed up some of her browser tabs and accidentally
+deleted live data. A lot of live data.</p>
+
+
+		
+		<a href="/blog/2014/02/19/differentiate-environments-with-different-favicons/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Joe Lencioni</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-19T14:04:00-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/efficiency/'>Efficiency</a>, <a class='category' href='/blog/categories/flow/'>Flow</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -577,104 +634,6 @@ generational does real harm because it encourages waiting while we might act.</p
 
 
 	<a class='category' href='/blog/categories/activism/'>Activism</a>, <a class='category' href='/blog/categories/homelessness/'>Homelessness</a>, <a class='category' href='/blog/categories/toolsofchange/'>ToolsOfChange</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/">
-		
-			Overcommit: The Opinionated Git Hook Manager</a>
-	</h2>
-	<div class="entry-content">
-		<p>At <a href="http://www.causes.com">Causes</a>, we care deeply about code quality.  We
-promote thorough, offline code review through
-<a href="https://code.google.com/p/gerrit/">Gerrit</a> and take pride in each commit we
-make. Due to the sheer volume of code review and the number of engineers on our
-team, it&rsquo;s important that by the time other engineers review our code we have an
-established baseline of quality.</p>
-
-<p>There are a few important ingredients to making a good commit:</p>
-
-<ul>
-<li>Correctness: The code does what you expect it to do</li>
-<li>Commit message: Tim Pope provides an excellent summary of <a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html">what makes a good
-commit message</a></li>
-<li>Style: The code matches our team&rsquo;s coding styles</li>
-<li>Test coverage: relevant tests have been run, and any new features have spec
-coverage</li>
-</ul>
-
-
-<p>Enter <a href="https://github.com/causes/overcommit">overcommit</a>. This evolved from a
-single file linter into a full-fledged, extensible hook architecture.  Available
-as a Ruby gem:</p>
-
-<pre><code>gem install overcommit
-</code></pre>
-
-<p>What does it do? In short, it automates away all the tedium before a commit
-reaches code review. It ships with a set of opinionated lints that ensure a
-level of consistency and quality in our commits.</p>
-
-<h2>In Action</h2>
-
-<p>Here&rsquo;s an example of overcommit saving me from committing janky code:</p>
-
-<pre><code>❯❯❯ echo "eval('alert(\"hello world\")');" > eval.js
-❯❯❯ git add eval.js
-❯❯❯ git commit
-Running pre_commit checks
-  Checking causes_email...........<span class="success">OK</span>
-  Checking test_history...........<span class="warning">No relevant tests for this change...write some?</span>
-  Checking restricted_paths.......<span class="success">OK</span>
-  Checking js_console_log.........<span class="success">OK</span>
-  Checking js_syntax..............<span class="error">FAILED</span>
-    eval.js: line 1, col 1, eval can be harmful.
-
-    1 error
-  Checking author_name............<span class="success">OK</span>
-  Checking whitespace.............<span class="success">OK</span>
-
-<span class="error">!!! One or more pre_commit checks failed</span>
-</code></pre>
-
-
-
-
-
-		
-		<a href="/blog/2013/05/30/overcommit-the-opinionated-git-hook-manager/" class="more-link">Read on</a>
-	</div>
-
-
-<div class="meta">
-	
-	<div class="author">Aiden Scandella</div>
-	
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-30T14:02:00-07:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/automation/'>Automation</a>, <a class='category' href='/blog/categories/git/'>Git</a>
 
 
 </div>

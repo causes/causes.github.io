@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2014-01-03T11:29:53-08:00</updated>
+  <updated>2014-02-19T17:12:30-08:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Differentiate Environments with Different Favicons]]></title>
+    <link href="http://causes.github.io/blog/2014/02/19/differentiate-environments-with-different-favicons/"/>
+    <updated>2014-02-19T14:04:00-08:00</updated>
+    <id>http://causes.github.io/blog/2014/02/19/differentiate-environments-with-different-favicons</id>
+    <content type="html"><![CDATA[<p>Sally has been tasked with making the commenting feature in her company&rsquo;s
+webapp be threaded up to 5 levels instead of only 2 levels. As she makes
+adjustments to the code, she collects an unprecedented number of browser tabs.
+Some of them point at her company&rsquo;s production site, while others point at her
+development environment. In many of them, she enabled &ldquo;super-user&rdquo; mode, so she
+could more freely play with her app while making her changes.</p>
+
+<p>So she goes on coding and messing with the data for most of the afternoon.
+She&rsquo;s about ready to wrap up and head home for the evening when her boss walks
+in and asks, &ldquo;Sally, lots of comments have gone missing. Do you know what
+happened?&rdquo; Sally felt like she had swallowed a sack of doorknobs. In the midst
+of her coding spree, she mixed up some of her browser tabs and accidentally
+deleted live data. A lot of live data.</p>
+
+<!-- more -->
+
+
+<hr />
+
+<p>At <a href="https://www.causes.com">Causes</a>, I often have a number of tabs open. Much like Sally, many of these
+are pointed at my development environment or the production environment. While
+I haven&rsquo;t been as unfortunate as Sally and accidentally done something in
+production, I noticed that I spent a fair amount of time searching through my
+tabs for the one I was looking for. When pairing with my colleagues, I noticed
+that they were spending a good amount of time doing the same thing. Although it
+wasn&rsquo;t a serious time commitment by any means, it slowed me down regularly.
+Sometimes, it was enough of a speed bump that took me out of my flow. I decided
+that there must be a way to improve this situation.</p>
+
+<p>The browser gives you two pieces of information in the tab: the page title and
+the favicon. This information should provide you with enough context for you to
+make a decision as to which tab you want to foist your full attention.</p>
+
+<p>Since page titles are often the same between environments, that&rsquo;s not a very
+useful way to differentiate between these types of tabs out of the box. I
+considered adding a prefix to the page title in development, as you might see
+with subject lines on email lists, but page titles are often hidden when you
+have lots of tabs open. Additionally, page titles feel like page-specific
+content, and we typically like things like that to be as similar as possible
+between development and production.</p>
+
+<p>Then I realized that we could pack this information into our favicon. The
+favicon is the perfect place to put this because they are often indicators of a
+domain, not a page. Also, favicons are the last piece of information to be
+hidden when opening definitely way too many tabs.</p>
+
+<p>I hit the command line and simply inverted the colors on our production favicon
+using ImageMagick, added some configuration to our development environment to
+use the inverted image, and I was up and running. Now it is much easier to
+figure out which tab is the one I am looking for.</p>
+
+<p>In a Rails environment, for example, you can make this magic happen by first
+defining a constant in your application configuration that points to the
+location of your production favicon file.</p>
+
+<figure class='code'><figcaption><span>config/application.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">FAVICON</span> <span class="o">=</span> <span class="s1">&#39;icons/favicon.png&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And in your development environment configuration, override this constant to
+point to a different favicon file:</p>
+
+<figure class='code'><figcaption><span>config/environments/development.rb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">FAVICON</span> <span class="o">=</span> <span class="s1">&#39;icons/favicon-inverted.png&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then simply consume the constant in your layouts and you should be good to go.</p>
+
+<p>This quick adjustment is so easy to do and will make you and your team a little
+bit faster every single day. It might even prevent some headaches. And, don&rsquo;t
+worry about Sally—thankfully she had only soft-deleted the comments.  All of
+the data was easily restored.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Integrating Bower with Rails]]></title>
