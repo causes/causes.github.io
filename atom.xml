@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2014-02-19T17:12:30-08:00</updated>
+  <updated>2014-02-23T09:34:09-08:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -12,6 +12,88 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Visual Diffs With Diffux]]></title>
+    <link href="http://causes.github.io/blog/2014/02/19/visual-diffs-with-diffux/"/>
+    <updated>2014-02-19T15:57:00-08:00</updated>
+    <id>http://causes.github.io/blog/2014/02/19/visual-diffs-with-diffux</id>
+    <content type="html"><![CDATA[<p>Are you worried that your CSS changes will break the current design in
+unexpected ways? Do you want to show a designer a page you&rsquo;ve been working on,
+before and after your changes? Do you want to be able to quickly look back at
+how things looked a month or a year ago?</p>
+
+<p><a href="https://github.com/trotzig/diffux">Diffux</a> [dɪˈfjuːz] is a tool that generates and manages visual diffs of web
+pages, so that you can easily see even the subtlest effects of your code
+modifications.</p>
+
+<!-- more -->
+
+
+<h2>Visualizing change</h2>
+
+<p>A scary part of writing CSS on a large website is that when changing styles on
+one page, you might unknowingly break styles on another page. This <a href="https://en.wikipedia.org/wiki/Action_at_a_distance_(computer_programming)">action at a
+distance</a>
+problem is something that most people who write CSS have come across. With this
+in mind we came to conclude that an automated diff tool that compared the look
+of a page before and after a change would be very helpful. Manually comparing
+page after page is just too time-consuming.</p>
+
+<p>We use Diffux to diff a large number of pages on our website
+(<a href="https://www.causes.com/">causes.com</a>) after every deploy. It has helped us find style
+regressions and bugs that we would have never found with a manual review
+process.</p>
+
+<h3>An example Diffux diff</h3>
+
+<p>This is an example of a before and after snapshot of the Diffux UI
+(Diffux runs in a browser, so we use it internally in the project too &ndash;
+Inception style). The snapshot on the left is before our change, the snapshot
+on the right is after our change and in between we have the generated visual
+diff of the two snapshots. First, try to spot the difference by just looking at
+the before and after snapshots. It&rsquo;s almost impossible. Now look at the visual
+diff and look for anything in magenta. It reveals that the icons in the top
+right corner of the thumbnails have changed slightly. <a href="https://github.com/trotzig/diffux/commit/564b520846825f6dea3770828d6c477aea8957cf">This commit
+message</a>
+explains more about what changed.</p>
+
+<p><img src="http://causes.github.io/assets/2014-02-19-diffux-diff.png"></p>
+
+<h2>Support for responsive diffs</h2>
+
+<p><a href="https://www.causes.com/">Causes.com</a> is a responsive website which means that it adapts to the
+available screen size of your device. On mobile, you&rsquo;ll be presented with a
+(mostly) one-column layout. On your laptop, we use more of your screen estate
+by using a sidebar and flowing things left-to-right. This is why <a href="https://github.com/trotzig/diffux">Diffux</a>
+allows you to specify a list of viewport widths to use when taking snapshots.
+Diffs are generated for each viewport, so you can easily see what effect your
+changes had on a page in many screen sizes.</p>
+
+<p><em>Setting to specify different viewport widths:</em></p>
+
+<p><img src="http://causes.github.io/assets/2014-02-19-diffux-viewport.png"></p>
+
+<p><em>Two snapshots of the same URL with different viewport widths (1024 and 320
+pixels):</em></p>
+
+<p><img src="http://causes.github.io/assets/2014-02-19-diffux-snapshots.png"></p>
+
+<h2>Alternatives</h2>
+
+<p>Before deciding to build <a href="https://github.com/trotzig/diffux">Diffux</a>, we scanned the open source market for some
+alternatives. <a href="https://github.com/bslatkin/dpxdt">Dpxdt</a> looked promising, so we gave it a spin. It got the job
+done, but the project looked abandoned (6 month old PRs hadn&rsquo;t received any
+attention, last commit was in August 2013) and we couldn&rsquo;t get the test suite
+to run locally. Plus, <a href="https://github.com/bslatkin/dpxdt">Dpxdt</a> is written in Python, and we are no Python
+experts. So there was a bit of a hurdle in debugging and adding functionality.</p>
+
+<h2>About</h2>
+
+<p><a href="https://github.com/trotzig/diffux">Diffux</a> is released under the MIT License and is available on Github:
+<a href="https://github.com/trotzig/diffux">https://github.com/trotzig/diffux</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Differentiate Environments with Different Favicons]]></title>
