@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Open Source | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/open-source/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2014-04-08T16:46:51-07:00</updated>
+  <updated>2014-04-08T16:58:56-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -127,7 +127,7 @@ right corner of the thumbnails have changed slightly. <a href="https://github.co
 message</a>
 explains more about what changed.</p>
 
-<p>{% img /assets/2014-02-19-diffux-diff.png %}</p>
+<p><img src="/assets/2014-02-19-diffux-diff.png"></p>
 
 <h2>Support for responsive diffs</h2>
 
@@ -141,12 +141,12 @@ changes had on a page in many screen sizes.</p>
 
 <p><em>Setting to specify different viewport widths:</em></p>
 
-<p>{% img /assets/2014-02-19-diffux-viewport.png %}</p>
+<p><img src="/assets/2014-02-19-diffux-viewport.png"></p>
 
 <p><em>Two snapshots of the same URL with different viewport widths (1024 and 320
 pixels):</em></p>
 
-<p>{% img /assets/2014-02-19-diffux-snapshots.png %}</p>
+<p><img src="/assets/2014-02-19-diffux-snapshots.png"></p>
 
 <h2>Alternatives</h2>
 

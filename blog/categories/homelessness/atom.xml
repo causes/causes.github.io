@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Homelessness | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/homelessness/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2014-04-08T16:46:51-07:00</updated>
+  <updated>2014-04-08T16:58:56-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -25,7 +25,7 @@ the progress of technology. Henry is a folk hero, but he dies betting against
 technology. The point isn&rsquo;t that technology wins, though — we don&rsquo;t really
 lose when technology wins.</p>
 
-<p>{% img left /assets/2013-06-04-john-henry.jpg 576 480 John Henry %}</p>
+<p><img class="left" src="/assets/2013-06-04-john-henry.jpg" width="576" height="480" title="John Henry" ></p>
 
 <iframe width="400" height="80" src="https://rd.io/i/QFdyK3YSgg/"
 frameborder="0"></iframe>
@@ -119,7 +119,7 @@ simple and intuitive, but the direct mapping of letter to a specific time isn&rs
 the only approach. Another could be that A through D collectively get the
 first hour, or whatever other grouping/distribution is useful.</p>
 
-<p>{% img left /assets/2013-06-04-hash.png 240 184 Hash function %}</p>
+<p><img class="left" src="/assets/2013-06-04-hash.png" width="240" height="184" title="Hash function" ></p>
 
 <p>With this approach, everybody knows when they can get a shower (it stays the
 same time for each person), and there&rsquo;s no point coming earlier or staying

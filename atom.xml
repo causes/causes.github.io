@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2014-04-08T16:43:18-07:00</updated>
+  <updated>2014-04-08T16:58:56-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -92,14 +92,6 @@ N+1 query, make sure to add the performance improvement to your test suite!</p>
 <p>Check out the project on Github:
 <a href="https://github.com/causes/db-query-matchers">https://github.com/causes/db-query-matchers</a></p>
 ]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Testing Database Queries Made In Rspec.markdown]]></title>
-    <link href="http://causes.github.io/blog/2014/04/08/testing-database-queries-made-in-rspec.markdown/"/>
-    <updated>2014-04-08T00:00:00-07:00</updated>
-    <id>http://causes.github.io/blog/2014/04/08/testing-database-queries-made-in-rspec.markdown</id>
-    <content type="html"><![CDATA[]]></content>
   </entry>
   
   <entry>
