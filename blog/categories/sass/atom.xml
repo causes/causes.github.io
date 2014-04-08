@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Sass | Causes Engineering]]></title>
   <link href="http://causes.github.io/blog/categories/sass/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2014-02-23T09:34:09-08:00</updated>
+  <updated>2014-04-08T16:46:51-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -256,7 +256,7 @@ using, we&rsquo;d have a single place to see that all of the colors look great n
 to each other, and engineers could easily pluck variable names when
 implementing designs to match the mocks.</p>
 
-<p><img src="/assets/2013-06-06-pantone-chips.png"></p>
+<p>{% img /assets/2013-06-06-pantone-chips.png %}</p>
 
 <!-- more -->
 

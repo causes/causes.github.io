@@ -7,10 +7,9 @@
 
 <meta name="author" content="Causes Engineers">
 
-<meta name="description" content="The Legend of John
-Henry holds a steel
-driver in contest with a steam-powered hammer, casting human excellence against
-the progress of technology. &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Over time, large-scale object-oriented systems tend to produce God
+Objects. These are classes which know
+too much or do too much. They have &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -59,6 +58,139 @@ the progress of technology. &hellip;"> <meta name="keywords" content="">
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/08/08/managing-side-effects-with-the-publish-subscribe-model/">
+		
+			Managing Side-effects With the Pub-Sub Model</a>
+	</h2>
+	<div class="entry-content">
+		<p>Over time, large-scale object-oriented systems tend to produce <a href="http://en.wikipedia.org/wiki/God_object">God
+Objects</a>. These are classes which know
+too much or do too much. They have connections to disparate and varied parts of
+the system. They depend on everything, and everything depends on them. They make
+systems slow to work with, intractable and hard to modify. They insidiously
+undermine and resist our efforts to carry out our core task as engineers:
+decomposing complex problems into smaller subproblems that are more easily
+solved.</p>
+
+<p>At <a href="http://www.causes.com">Causes</a> there are some concepts that are
+front-and-center in our product: users, their campaigns and the actions
+they create to make an impact (things like petitions, fundraisers and pledges).
+The concepts are so core that they have a tendency to become God Objects unless
+we diligently work to prevent them accruing more and more functionality.</p>
+
+<p>We&rsquo;ve lately applied the
+<a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern">Pub-Sub</a>
+(Publish-Subscribe) model to our Ruby code, applying the familiar event-based
+patterns that we know from JavaScript to the server side, in an effort to reduce
+the tight coupling that some of these God Objects have to other parts of the
+system. With a simple, framework-agnostic Ruby library, we&rsquo;ve been able to
+significantly tame some of the complexity around these classes, and we&rsquo;ve
+released it as a Ruby gem, <a href="https://github.com/causes/pubsubhub">PubSubHub</a>.</p>
+
+
+		
+		<a href="/blog/2013/08/08/managing-side-effects-with-the-publish-subscribe-model/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Greg Hurrell</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-08-08T10:00:00-07:00" pubdate data-updated="true">Aug 8<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/architecture/'>Architecture</a>, <a class='category' href='/blog/categories/maintainability/'>Maintainability</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="http://joelencioni.com/blog/2013/06/06/showing-color-chips-from-sass-variables/">
+		
+			Showing Color Chips From Sass Variables</a>
+	</h2>
+	<div class="entry-content">
+		<p>At <a href="http://www.causes.com">Causes</a> we like to make our code more maintainable by building reusable
+components. Part of this strategy includes <a href="http://joelencioni.com/blog/2013/03/16/10-easy-ways-to-craft-more-readable-css/#two-or-more-use-a-for">assigning variable names to hex
+colors using Sass</a>. This allows us to more easily reuse the same colors
+everywhere, which improves consistency and makes it easier to re-color the
+entire site when our design needs change.</p>
+
+<p>To increase the visibility of these reusable components, we&rsquo;ve been building
+out a collection of things that designers and engineers can reference, drop in
+to projects, and iterate upon. The code sits next to the rendered version,
+allowing people to easily see the implementation required to produce the
+result. We call this collection the component gallery. It helps us do more with
+less code, be more consistent, and iterate on global changes more easily and
+effectively.</p>
+
+<p>When we started fleshing out the color variables we wanted to use throughout
+the site, it seemed natural to show these colors in the component gallery as
+Pantone color chips. That way, designers could reference the colors that we are
+using, we&rsquo;d have a single place to see that all of the colors look great next
+to each other, and engineers could easily pluck variable names when
+implementing designs to match the mocks.</p>
+
+<p><img src="/assets/2013-06-06-pantone-chips.png"></p>
+
+
+		
+		<a href="/blog/2013/06/06/showing-color-chips-from-sass-variables/" class="more-link">Read on</a>
+	</div>
+
+
+<div class="meta">
+	
+	<div class="author">Joe Lencioni</div>
+	
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-06T07:00:00-07:00" pubdate data-updated="true">Jun 6<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/sass/'>Sass</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -534,10 +666,10 @@ familiar with.</p>
 
 <nav id="pagenavi">
     
-        <a href="/" class="prev">Prev</a>
+        <a href="/blog/" class="prev">Prev</a>
     
     
-    <div class="center"><a href="/archives">Blog Archives</a></div>
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
 	<footer id="footer" class="inner">Copyright &copy; 2014
 

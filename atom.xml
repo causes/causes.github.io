@@ -4,7 +4,7 @@
   <title><![CDATA[Causes Engineering]]></title>
   <link href="http://causes.github.io/atom.xml" rel="self"/>
   <link href="http://causes.github.io/"/>
-  <updated>2014-02-23T09:34:09-08:00</updated>
+  <updated>2014-04-08T16:43:18-07:00</updated>
   <id>http://causes.github.io/</id>
   <author>
     <name><![CDATA[Causes Engineers]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Testing database queries made in RSpec]]></title>
+    <link href="http://causes.github.io/blog/2014/04/08/testing-database-queries-made-in-rspec/"/>
+    <updated>2014-04-08T14:35:00-07:00</updated>
+    <id>http://causes.github.io/blog/2014/04/08/testing-database-queries-made-in-rspec</id>
+    <content type="html"><![CDATA[<p>Recently, <a href="http://joelencioni.com">Joe</a> and I have been doing some performance work on <a href="https://www.causes.com/">causes.com</a> to
+speed up the time it takes to generate a page on the server. Most of that work
+meant reducing the number of database queries we make. Take the <a href="https://www.causes.com/henric">profile page</a>
+for example. On that page, we list the most important campaigns you&rsquo;ve
+participated in. Before we started optimizing it, we were making more than 10
+queries per campaign listed. We added some pre-loading and caching and
+managed to take all those database queries down by 90%. That in turn brought
+the time it took to generate this page down from about a second to 200
+milliseconds.</p>
+
+<!-- more -->
+
+
+<h2>Testing the avoidance of database queries</h2>
+
+<p>In order to verify that the work we did had the effect we intended, and to
+guard us against future regressions, we built a tool to use in our unit tests
+that counts the number of database queries made by running a particular piece
+of code. Here&rsquo;s an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">describe</span> <span class="s1">&#39;rendering a collection of items&#39;</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">let</span><span class="p">(</span><span class="ss">:items</span><span class="p">)</span> <span class="p">{</span> <span class="no">Item</span><span class="o">.</span><span class="n">last</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>  <span class="n">subject</span> <span class="p">{</span> <span class="n">render_items</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;when the items have not been pre-loaded&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;performs database queries&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span> <span class="p">{</span> <span class="n">subject</span> <span class="p">}</span><span class="o">.</span><span class="n">to</span> <span class="n">make_database_queries</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">context</span> <span class="s1">&#39;when the items have been pre-loaded&#39;</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">before</span> <span class="p">{</span> <span class="n">preload_items</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">it</span> <span class="s1">&#39;does not perform any database queries&#39;</span> <span class="k">do</span>
+</span><span class='line'>      <span class="n">expect</span> <span class="p">{</span> <span class="n">subject</span> <span class="p">}</span><span class="o">.</span><span class="n">to_not</span> <span class="n">make_database_queries</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The interesting part here is the <code>make_database_queries</code> <a href="http://rspec.info/">RSpec</a> matcher. It
+hooks into <a href="http://api.rubyonrails.org/classes/ActiveRecord/Base.html">ActiveRecord</a> and detects all database queries made during the
+execution of the block. If you don&rsquo;t expect queries, but some are made, the
+spec will fail with a list of the queries made. This makes debugging much
+simpler, since you can usually narrow down the query to a missing <code>includes</code>.</p>
+
+<h2>Introducing the <code>db-query-matchers</code> gem</h2>
+
+<p>We bundled the <code>make_database_queries</code> matcher into a
+<a href="https://github.com/causes/db-query-matchers">reusable gem</a>. Next time you add a caching layer or fix an
+N+1 query, make sure to add the performance improvement to your test suite!</p>
+
+<p>Check out the project on Github:
+<a href="https://github.com/causes/db-query-matchers">https://github.com/causes/db-query-matchers</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Testing Database Queries Made In Rspec.markdown]]></title>
+    <link href="http://causes.github.io/blog/2014/04/08/testing-database-queries-made-in-rspec.markdown/"/>
+    <updated>2014-04-08T00:00:00-07:00</updated>
+    <id>http://causes.github.io/blog/2014/04/08/testing-database-queries-made-in-rspec.markdown</id>
+    <content type="html"><![CDATA[]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Visual Diffs With Diffux]]></title>
